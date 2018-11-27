@@ -1,4 +1,4 @@
-import * as rp from 'request-promise'
+import * as request from 'request-promise'
 import * as cheerio from 'cheerio'
 import { getScrapedData } from './api/scrapers'
 import { writeScrapedData } from './api/writers'
@@ -12,7 +12,7 @@ import { writeScrapedData } from './api/writers'
     }
 
     try {
-        const scraper = await rp(options)
+        const scraper = await request(options)
         const data = getScrapedData(scraper)
         await writeScrapedData(data)
         console.dir(data, {depth: null})
