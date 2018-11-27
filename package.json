@@ -1,0 +1,27 @@
+{
+    "name": "airplane-scraper",
+    "private": true,
+    "version": "1.0.0",
+    "main": "index.ts",
+    "author": "Maikel van Veen <maikeloo10@hotmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "lint": "tslint",
+        "serve": "nodemon"
+    },
+    "dependencies": {
+        "cheerio": "^1.0.0-rc.2",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.2"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.10",
+        "@types/request": "^2.48.1",
+        "@types/request-promise": "^4.1.42",
+        "nodemon": "^1.18.7",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.11.0",
+        "tslint-eslint-rules": "^5.4.0",
+        "typescript": "^3.1.6"
+    }
+}
