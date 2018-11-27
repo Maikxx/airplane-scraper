@@ -6,3 +6,8 @@ export const cleanText = (text: string) => {
     return removeSourceNumbersFromText(text)
         .trim()
 }
+
+export const convertToNumber = (text: string): number => {
+    return Number(text
+        .replace(',', ''))
+}

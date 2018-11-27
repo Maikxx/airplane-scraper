@@ -1,4 +1,4 @@
-import { cleanText } from './transformers'
+import { cleanText, convertToNumber } from './transformers'
 
 const scrapeTitle = scraper => {
     const title = scraper('#firstHeading').text()
@@ -56,6 +56,43 @@ const scrapePrimaryUsers = scraper => {
     return primaryUsers.map(primaryUser => cleanText(primaryUser))
 }
 
+const scrapeProductionYears = scraper => {
+    const productionYears = scraper('.infobox th:contains("Produced")')
+        .next()
+        .text()
+
+    return cleanText(productionYears)
+}
+
+const scrapeBuiltNumber = scraper => {
+    const amountBuilt = scraper('.infobox th:contains("built")')
+        .next()
+        .text()
+    const cleanedAmountBuilt = cleanText(amountBuilt.split('(')[0])
+
+    return convertToNumber(cleanedAmountBuilt)
+}
+
+const scrapeVariants = scraper => {
+    const th = scraper('.infobox th:contains("Variants")')
+    const variants = th
+        .next()
+        .find('a')
+            .map((i, el) => scraper(el).text()).get()
+
+    return variants.map(variant => cleanText(variant))
+}
+
+const scrapeDevelopedInto = scraper => {
+    const th = scraper('.infobox th:contains("Developed into")')
+    const planeNames = th
+        .next()
+        .find('a')
+            .map((i, el) => scraper(el).text()).get()
+
+    return planeNames.map(planeName => cleanText(planeName))
+}
+
 export const getScrapedData = scraper => {
     return {
         title: scrapeTitle(scraper),
@@ -65,5 +102,9 @@ export const getScrapedData = scraper => {
         firstFlight: scrapeFirstFlightDate(scraper),
         usageStatus: scrapeUsageStatus(scraper),
         primaryUsers: scrapePrimaryUsers(scraper),
+        productionYears: scrapeProductionYears(scraper),
+        amountBuilt: scrapeBuiltNumber(scraper),
+        variants: scrapeVariants(scraper),
+        developedInto: scrapeDevelopedInto(scraper),
     }
 }
