@@ -4,6 +4,7 @@ import { getScrapedData } from './api/scrapers'
 import { writeScrapedData } from './api/writers'
 
 (async () => {
+    console.time('Finished scraping in')
     console.log('Scrapin\' we go!')
 
     const options = {
@@ -20,5 +21,5 @@ import { writeScrapedData } from './api/writers'
         console.error(error)
     }
 
-    console.log('Finished scraping!')
+    console.timeEnd('Finished scraping in')
 })()
