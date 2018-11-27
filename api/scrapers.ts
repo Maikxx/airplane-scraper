@@ -23,7 +23,7 @@ const scrapeOrigin = scraper => {
 }
 
 const scrapeManufacturer = scraper => {
-    const manufacturedBy = scraper('.infobox th:contains("Manufacturer")')
+    const manufacturedBy = scraper('.infobox th:contains("Manufacturer"),.infobox th:contains("Built by")')
         .next()
         .text()
 
@@ -68,7 +68,12 @@ const scrapeBuiltNumber = scraper => {
     const amountBuilt = scraper('.infobox th:contains("built")')
         .next()
         .text()
-    const cleanedAmountBuilt = cleanText(amountBuilt.split('(')[0])
+    const isolatedNumberString = amountBuilt
+        .split('(')[0]
+        .split('as of')[0]
+        .split('through')[0]
+
+    const cleanedAmountBuilt = cleanText(isolatedNumberString)
 
     return convertToNumber(cleanedAmountBuilt)
 }
