@@ -1,31 +1,39 @@
 import * as request from 'request-promise'
-import { scrapeAirplanePage } from './api/scrapers'
+import { scrapeAirplanePage, scrapeAirplaneUrls } from './api/scrapers'
 import { writeScrapedData } from './api/writers'
 import { getQueryOptions } from './api/queries'
+import { flatten } from './api/utils/flatten'
+import { convertToUsableUrl } from './api/transformers'
 
 (async () => {
     console.time('Finished scraping in')
     console.log('Scrapin\' we go!')
 
     try {
-        const urls = [
-            `https://en.wikipedia.org/wiki/Airbus_A380`,
-            `https://en.wikipedia.org/wiki/Antonov_An-225_Mriya`,
-            `https://en.wikipedia.org/wiki/Boeing_737_MAX`,
-            `https://en.wikipedia.org/wiki/Boeing_747`,
-            `https://en.wikipedia.org/wiki/Boeing_777`,
-            `https://en.wikipedia.org/wiki/Boeing_787_Dreamliner`,
-            `https://en.wikipedia.org/wiki/Fokker_70`,
-            `https://en.wikipedia.org/wiki/Fokker_100`,
+        const airplaneListUrls = [
+            'https://en.wikipedia.org/wiki/List_of_civil_aircraft',
+            // 'https://en.wikipedia.org/wiki/List_of_large_aircraft',
+            // 'https://en.wikipedia.org/wiki/List_of_fighter_aircraft',
+            // 'https://en.wikipedia.org/wiki/List_of_individual_aircraft',
         ]
 
-        const data = await Promise.all(urls.map(async url => {
+        const scrapedAirplaneUrls = await Promise.all(airplaneListUrls.map(async url => {
             const scraper = await request(getQueryOptions(url))
-            return scrapeAirplanePage(scraper)
-        }))
+            return scrapeAirplaneUrls(scraper)
+        })) as string[][]
 
-        await writeScrapedData(data)
-        console.dir(data, { depth: null })
+        const flatScrapedAirplaneUrls = flatten(scrapedAirplaneUrls)
+        const usableScrapedUrls = flatScrapedAirplaneUrls
+            .map(convertToUsableUrl)
+            .filter(url => !!url)
+
+        // const data = await Promise.all(airplaneUrls.map(async url => {
+        //     const scraper = await request(getQueryOptions(url))
+        //     return scrapeAirplanePage(scraper)
+        // }))
+
+        // await writeScrapedData(data)
+        console.dir(usableScrapedUrls, { depth: null })
     } catch (error) {
         console.error(error)
     }

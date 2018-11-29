@@ -1,4 +1,5 @@
 import { cleanText, convertToNumber } from './transformers'
+import { flattenDeep } from './utils/flatten'
 
 const scrapeTitle = scraper => {
     const title = scraper('#firstHeading').text()
@@ -112,4 +113,12 @@ export const scrapeAirplanePage = scraper => {
         variants: scrapeVariants(scraper),
         developedInto: scrapeDevelopedInto(scraper),
     }
+}
+
+export const scrapeAirplaneUrls = async scraper => {
+    const urls = await Promise.all(scraper('h3 + ul li a:first-child')
+        .map(async (i2, anchorElement) => await scraper(anchorElement).attr('href'))
+        .get())
+
+    return flattenDeep(urls)
 }
