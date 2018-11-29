@@ -25,7 +25,7 @@ import { getQueryOptions } from './api/queries'
         }))
 
         await writeScrapedData(data)
-        console.dir(data, {depth: null})
+        console.dir(data, { depth: null })
     } catch (error) {
         console.error(error)
     }
