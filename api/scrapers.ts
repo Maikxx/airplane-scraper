@@ -98,7 +98,7 @@ const scrapeDevelopedInto = scraper => {
     return planeNames.map(planeName => cleanText(planeName))
 }
 
-export const getScrapedData = scraper => {
+export const scrapeAirplanePage = scraper => {
     return {
         title: scrapeTitle(scraper),
         role: scrapeRole(scraper),

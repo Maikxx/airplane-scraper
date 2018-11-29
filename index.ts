@@ -1,5 +1,5 @@
 import * as request from 'request-promise'
-import { getScrapedData } from './api/scrapers'
+import { scrapeAirplanePage } from './api/scrapers'
 import { writeScrapedData } from './api/writers'
 import { getQueryOptions } from './api/queries'
 
@@ -21,7 +21,7 @@ import { getQueryOptions } from './api/queries'
 
         const data = await Promise.all(urls.map(async url => {
             const scraper = await request(getQueryOptions(url))
-            return getScrapedData(scraper)
+            return scrapeAirplanePage(scraper)
         }))
 
         await writeScrapedData(data)
