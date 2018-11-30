@@ -9,6 +9,17 @@ const scrapeTitle = scraper => {
     return cleanText(title)
 }
 
+const scrapeImageSrc = scraper => {
+    const src = scraper('.infobox img:first-child')
+        .attr('src')
+
+    console.log(src)
+
+    return src
+        ? src.replace('//upload', 'https://upload')
+        : undefined
+}
+
 const scrapeRole = scraper => {
     const role = scraper('.infobox th:contains("Role")')
         .next()
@@ -132,6 +143,7 @@ export const scrapeAirplanePage = async (url: string) => {
 
         const data = {
             title: scrapeTitle(scraper),
+            imageSrc: scrapeImageSrc(scraper),
             role: scrapeRole(scraper),
             origin: scrapeOrigin(scraper),
             manufacturedBy: scrapeManufacturer(scraper),
