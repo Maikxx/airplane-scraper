@@ -14,7 +14,9 @@ const scrapeRole = scraper => {
         .next()
         .text()
 
-    return cleanText(role)
+    const cleanRole = cleanText(role)
+
+    return `${cleanRole[0].toUpperCase()}${cleanRole.substr(1)}`
 }
 
 const scrapeOrigin = scraper => {
@@ -45,16 +47,32 @@ const scrapeUsageStatus = scraper => {
     const usageStatus = scraper('.infobox th:contains("Status")')
         .next()
         .text()
+    const retirementYear = scraper('.infobox th:contains("Retired")')
+        .next()
+        .text()
 
-    return cleanText(usageStatus)
+    if (!usageStatus && convertToNumber(retirementYear)) {
+        return `Retired (${retirementYear})`
+    }
+
+    const cleanUsageStatus = cleanText(usageStatus)
+
+    return `${cleanUsageStatus[0].toUpperCase()}${cleanUsageStatus.substr(1)}`
 }
 
 const scrapePrimaryUsers = scraper => {
-    const th = scraper('.infobox th:contains("users")')
-    const primaryUsers = th
+    const primaryUsers = scraper('.infobox th:contains("users")')
         .next()
         .find('a')
             .map((i, el) => scraper(el).text()).get()
+    const primaryUser = scraper('.infobox th:contains("Primary user")')
+        .next()
+            .next()
+            .text()
+
+    if (!primaryUsers && primaryUser) {
+        return [cleanText(primaryUser)]
+    }
 
     return primaryUsers.map(primaryUser => cleanText(primaryUser))
 }
@@ -71,14 +89,8 @@ const scrapeBuiltNumber = scraper => {
     const amountBuilt = scraper('.infobox th:contains("built")')
         .next()
         .text()
-    const isolatedNumberString = amountBuilt
-        .split('(')[0]
-        .split('as of')[0]
-        .split('through')[0]
 
-    const cleanedAmountBuilt = cleanText(isolatedNumberString)
-
-    return convertToNumber(cleanedAmountBuilt)
+    return cleanText(amountBuilt)
 }
 
 const scrapeVariants = scraper => {
@@ -117,6 +129,10 @@ export const scrapeAirplanePage = async (url: string) => {
             amountBuilt: scrapeBuiltNumber(scraper),
             variants: scrapeVariants(scraper),
             developedInto: scrapeDevelopedInto(scraper),
+        }
+
+        if (data.title.includes('User talk')) {
+            return
         }
 
         const jsonData = JSON.stringify(data)
