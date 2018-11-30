@@ -1,5 +1,7 @@
-import { cleanText, convertToNumber } from './transformers'
-import { flattenDeep } from './utils/flatten'
+import * as request from 'request-promise'
+import { cleanText, convertToNumber } from '../transformers'
+import { getQueryOptions } from '../queries'
+import { dataFile } from '../..'
 
 const scrapeTitle = scraper => {
     const title = scraper('#firstHeading').text()
@@ -99,26 +101,28 @@ const scrapeDevelopedInto = scraper => {
     return planeNames.map(planeName => cleanText(planeName))
 }
 
-export const scrapeAirplanePage = scraper => {
-    return {
-        title: scrapeTitle(scraper),
-        role: scrapeRole(scraper),
-        origin: scrapeOrigin(scraper),
-        manufacturedBy: scrapeManufacturer(scraper),
-        firstFlight: scrapeFirstFlightDate(scraper),
-        usageStatus: scrapeUsageStatus(scraper),
-        primaryUsers: scrapePrimaryUsers(scraper),
-        productionYears: scrapeProductionYears(scraper),
-        amountBuilt: scrapeBuiltNumber(scraper),
-        variants: scrapeVariants(scraper),
-        developedInto: scrapeDevelopedInto(scraper),
+export const scrapeAirplanePage = async (url: string) => {
+    try {
+        const scraper = await request(getQueryOptions(url))
+
+        const data = {
+            title: scrapeTitle(scraper),
+            role: scrapeRole(scraper),
+            origin: scrapeOrigin(scraper),
+            manufacturedBy: scrapeManufacturer(scraper),
+            firstFlight: scrapeFirstFlightDate(scraper),
+            usageStatus: scrapeUsageStatus(scraper),
+            primaryUsers: scrapePrimaryUsers(scraper),
+            productionYears: scrapeProductionYears(scraper),
+            amountBuilt: scrapeBuiltNumber(scraper),
+            variants: scrapeVariants(scraper),
+            developedInto: scrapeDevelopedInto(scraper),
+        }
+
+        const jsonData = JSON.stringify(data)
+
+        dataFile.write(`,${jsonData}`)
+    } catch (error) {
+        console.error(error)
     }
-}
-
-export const scrapeAirplaneUrls = async scraper => {
-    const urls = await Promise.all(scraper('h3 + ul li a:first-child')
-        .map(async (i2, anchorElement) => await scraper(anchorElement).attr('href'))
-        .get())
-
-    return flattenDeep(urls)
 }

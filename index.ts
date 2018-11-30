@@ -1,42 +1,15 @@
-import * as request from 'request-promise'
-import { scrapeAirplanePage, scrapeAirplaneUrls } from './api/scrapers'
-import { writeScrapedData } from './api/writers'
-import { getQueryOptions } from './api/queries'
-import { flatten } from './api/utils/flatten'
-import { convertToUsableUrl } from './api/transformers'
+import * as fs from 'fs'
+import { scrapeCivilAirplaneUrls } from './api/scrapers/civilAirplaneUrls'
 
-(async () => {
-    console.time('Finished scraping in')
+export const dataFile = fs.createWriteStream('data/planes.json')
+
+; (async () => {
     console.log('Scrapin\' we go!')
+    dataFile.write('[')
 
     try {
-        const airplaneListUrls = [
-            'https://en.wikipedia.org/wiki/List_of_civil_aircraft',
-            // 'https://en.wikipedia.org/wiki/List_of_large_aircraft',
-            // 'https://en.wikipedia.org/wiki/List_of_fighter_aircraft',
-            // 'https://en.wikipedia.org/wiki/List_of_individual_aircraft',
-        ]
-
-        const scrapedAirplaneUrls = await Promise.all(airplaneListUrls.map(async url => {
-            const scraper = await request(getQueryOptions(url))
-            return scrapeAirplaneUrls(scraper)
-        })) as string[][]
-
-        const flatScrapedAirplaneUrls = flatten(scrapedAirplaneUrls)
-        const usableScrapedUrls = flatScrapedAirplaneUrls
-            .map(convertToUsableUrl)
-            .filter(url => !!url)
-
-        // const data = await Promise.all(airplaneUrls.map(async url => {
-        //     const scraper = await request(getQueryOptions(url))
-        //     return scrapeAirplanePage(scraper)
-        // }))
-
-        // await writeScrapedData(data)
-        console.dir(usableScrapedUrls, { depth: null })
+        scrapeCivilAirplaneUrls()
     } catch (error) {
         console.error(error)
     }
-
-    console.timeEnd('Finished scraping in')
 })()
