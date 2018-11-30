@@ -30,7 +30,7 @@
         "jsx-no-multiline-js": false,
         "jsx-self-close": true,
         "jsx-wrap-multiline": [false],
-        "jsx-use-translation-function": { "severity": "warning" },
+        "jsx-use-translation-function": false,
         "label-position": true,
         "linebreak-style": [true, "LF"],
         "member-access": [true, "check-accessor", "check-parameter-property"],
