@@ -1,0 +1,8 @@
+{
+  "name": "airplane-scraper-app",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "Maikel van Veen <maikeloo10@hotmail.com>",
+  "private": true,
+  "license": "MIT"
+}
