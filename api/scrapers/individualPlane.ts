@@ -1,5 +1,5 @@
 import * as request from 'request-promise'
-import { cleanText, convertToNumber } from '../transformers'
+import { cleanText, convertToNumber, capitalizeFirstLetter } from '../transformers'
 import { getQueryOptions } from '../queries'
 import { dataFile } from '../..'
 
@@ -20,11 +20,9 @@ const scrapeRole = scraper => {
 
     const cleanRole = cleanText(role)
 
-    if (!cleanRole) {
-        return role
-    }
-
-    return `${cleanRole[0].toUpperCase()}${cleanRole.substr(1)}`
+    return cleanRole
+        ? capitalizeFirstLetter(cleanRole)
+        : role
 }
 
 const scrapeOrigin = scraper => {
@@ -34,7 +32,7 @@ const scrapeOrigin = scraper => {
     const cleanOrigin = cleanText(origin)
 
     return cleanOrigin
-        ? cleanOrigin
+        ? capitalizeFirstLetter(cleanOrigin)
         : undefined
 }
 
@@ -45,7 +43,7 @@ const scrapeManufacturer = scraper => {
     const cleanManufacturedBy = cleanText(manufacturedBy)
 
     return cleanManufacturedBy
-        ? cleanManufacturedBy
+        ? capitalizeFirstLetter(cleanManufacturedBy)
         : undefined
 }
 
@@ -56,7 +54,7 @@ const scrapeFirstFlightDate = scraper => {
     const cleanFirstFlightDate = cleanText(firstFlightDate)
 
     return cleanFirstFlightDate
-        ? cleanFirstFlightDate
+        ? capitalizeFirstLetter(cleanFirstFlightDate)
         : undefined
 }
 
@@ -78,11 +76,9 @@ const scrapeUsageStatus = scraper => {
 
     const cleanUsageStatus = cleanText(usageStatus)
 
-    if (!cleanUsageStatus) {
-        return undefined
-    }
-
-    return `${cleanUsageStatus[0].toUpperCase()}${cleanUsageStatus.substr(1)}`
+    return cleanUsageStatus
+        ? capitalizeFirstLetter(cleanUsageStatus)
+        : undefined
 }
 
 const scrapePrimaryUsers = scraper => {
@@ -90,16 +86,20 @@ const scrapePrimaryUsers = scraper => {
         .next()
         .find('a')
             .map((i, el) => scraper(el).text()).get()
-    const primaryUser = scraper('.infobox th:contains("Primary user")')
-        .next()
+
+    if (!primaryUsers.length) {
+        const primaryUser = scraper('.infobox th:contains("user")')
             .next()
             .text()
 
-    if (!primaryUsers && primaryUser) {
-        return [cleanText(primaryUser)]
+        const cleanPrimaryUser = primaryUser && cleanText(primaryUser)
+
+        return cleanPrimaryUser
+            ? [capitalizeFirstLetter(cleanPrimaryUser)]
+            : undefined
     }
 
-    return primaryUsers
+    return primaryUsers.length > 0
         ? primaryUsers.map(primaryUser => cleanText(primaryUser))
         : undefined
 }
@@ -111,7 +111,7 @@ const scrapeProductionYears = scraper => {
     const cleanProductionYears = cleanText(productionYears)
 
     return cleanProductionYears
-        ? cleanProductionYears
+        ? capitalizeFirstLetter(cleanProductionYears)
         : undefined
 }
 
@@ -122,31 +122,7 @@ const scrapeBuiltNumber = scraper => {
     const cleanAmountBuilt = cleanText(amountBuilt)
 
     return cleanAmountBuilt
-        ? cleanAmountBuilt
-        : undefined
-}
-
-const scrapeVariants = scraper => {
-    const th = scraper('.infobox th:contains("Variants")')
-    const variants = th
-        .next()
-        .find('a')
-            .map((i, el) => scraper(el).text()).get()
-
-    return variants
-        ? variants.map(variant => cleanText(variant))
-        : undefined
-}
-
-const scrapeDevelopedInto = scraper => {
-    const th = scraper('.infobox th:contains("Developed into")')
-    const planeNames = th
-        .next()
-        .find('a')
-            .map((i, el) => scraper(el).text()).get()
-
-    return planeNames
-        ? planeNames.map(planeName => cleanText(planeName))
+        ? capitalizeFirstLetter(cleanAmountBuilt)
         : undefined
 }
 
@@ -164,14 +140,15 @@ export const scrapeAirplanePage = async (url: string) => {
             primaryUsers: scrapePrimaryUsers(scraper),
             productionYears: scrapeProductionYears(scraper),
             amountBuilt: scrapeBuiltNumber(scraper),
-            variants: scrapeVariants(scraper),
-            developedInto: scrapeDevelopedInto(scraper),
         }
 
-        console.log(data)
+        const lowerCaseTitle = data.title.toLowerCase()
 
-        if (data.title.includes('User talk')) {
-            return
+        const shouldIgnoreItem = lowerCaseTitle.includes('talk')
+            || lowerCaseTitle.includes('list of')
+
+        if (shouldIgnoreItem) {
+            return null
         }
 
         const jsonData = JSON.stringify(data)

@@ -19,3 +19,7 @@ export const convertToUsableUrl = (url: string): string | null => {
 
     return null
 }
+
+export const capitalizeFirstLetter = (text: string): string => {
+    return `${text[0].toUpperCase()}${text.slice(1)}`
+}
