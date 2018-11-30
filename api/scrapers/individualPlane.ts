@@ -14,7 +14,15 @@ const scrapeRole = scraper => {
         .next()
         .text()
 
+    if (!role) {
+        return undefined
+    }
+
     const cleanRole = cleanText(role)
+
+    if (!cleanRole) {
+        return role
+    }
 
     return `${cleanRole[0].toUpperCase()}${cleanRole.substr(1)}`
 }
@@ -23,24 +31,33 @@ const scrapeOrigin = scraper => {
     const origin = scraper('.infobox th:contains("origin")')
         .next()
         .text()
+    const cleanOrigin = cleanText(origin)
 
-    return cleanText(origin)
+    return cleanOrigin
+        ? cleanOrigin
+        : undefined
 }
 
 const scrapeManufacturer = scraper => {
     const manufacturedBy = scraper('.infobox th:contains("Manufacturer"),.infobox th:contains("Built by")')
         .next()
         .text()
+    const cleanManufacturedBy = cleanText(manufacturedBy)
 
-    return cleanText(manufacturedBy)
+    return cleanManufacturedBy
+        ? cleanManufacturedBy
+        : undefined
 }
 
 const scrapeFirstFlightDate = scraper => {
     const firstFlightDate = scraper('.infobox th:contains("First flight")')
         .next()
         .text()
+    const cleanFirstFlightDate = cleanText(firstFlightDate)
 
-    return cleanText(firstFlightDate)
+    return cleanFirstFlightDate
+        ? cleanFirstFlightDate
+        : undefined
 }
 
 const scrapeUsageStatus = scraper => {
@@ -51,11 +68,19 @@ const scrapeUsageStatus = scraper => {
         .next()
         .text()
 
-    if (!usageStatus && convertToNumber(retirementYear)) {
-        return `Retired (${retirementYear})`
+    if (!usageStatus) {
+        if (retirementYear) {
+            return `Retired (${retirementYear})`
+        }
+
+        return undefined
     }
 
     const cleanUsageStatus = cleanText(usageStatus)
+
+    if (!cleanUsageStatus) {
+        return undefined
+    }
 
     return `${cleanUsageStatus[0].toUpperCase()}${cleanUsageStatus.substr(1)}`
 }
@@ -74,23 +99,31 @@ const scrapePrimaryUsers = scraper => {
         return [cleanText(primaryUser)]
     }
 
-    return primaryUsers.map(primaryUser => cleanText(primaryUser))
+    return primaryUsers
+        ? primaryUsers.map(primaryUser => cleanText(primaryUser))
+        : undefined
 }
 
 const scrapeProductionYears = scraper => {
     const productionYears = scraper('.infobox th:contains("Produced")')
         .next()
         .text()
+    const cleanProductionYears = cleanText(productionYears)
 
-    return cleanText(productionYears)
+    return cleanProductionYears
+        ? cleanProductionYears
+        : undefined
 }
 
 const scrapeBuiltNumber = scraper => {
     const amountBuilt = scraper('.infobox th:contains("built")')
         .next()
         .text()
+    const cleanAmountBuilt = cleanText(amountBuilt)
 
-    return cleanText(amountBuilt)
+    return cleanAmountBuilt
+        ? cleanAmountBuilt
+        : undefined
 }
 
 const scrapeVariants = scraper => {
@@ -100,7 +133,9 @@ const scrapeVariants = scraper => {
         .find('a')
             .map((i, el) => scraper(el).text()).get()
 
-    return variants.map(variant => cleanText(variant))
+    return variants
+        ? variants.map(variant => cleanText(variant))
+        : undefined
 }
 
 const scrapeDevelopedInto = scraper => {
@@ -110,7 +145,9 @@ const scrapeDevelopedInto = scraper => {
         .find('a')
             .map((i, el) => scraper(el).text()).get()
 
-    return planeNames.map(planeName => cleanText(planeName))
+    return planeNames
+        ? planeNames.map(planeName => cleanText(planeName))
+        : undefined
 }
 
 export const scrapeAirplanePage = async (url: string) => {
@@ -130,6 +167,8 @@ export const scrapeAirplanePage = async (url: string) => {
             variants: scrapeVariants(scraper),
             developedInto: scrapeDevelopedInto(scraper),
         }
+
+        console.log(data)
 
         if (data.title.includes('User talk')) {
             return
