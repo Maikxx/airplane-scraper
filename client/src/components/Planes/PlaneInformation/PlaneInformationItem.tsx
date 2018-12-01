@@ -21,6 +21,10 @@ export class PlaneInformationItem extends React.Component<Props> {
         const { label, text } = content
         const textShouldBeNewList = Array.isArray(text) && text.length > 1
 
+        if (!text) {
+            return null
+        }
+
         return (
             <ListItem className={this.getClassName()}>
                 {!textShouldBeNewList && (
