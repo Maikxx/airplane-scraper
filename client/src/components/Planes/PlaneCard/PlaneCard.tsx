@@ -1,12 +1,13 @@
 import './PlaneCard.scss'
 import * as React from 'react'
 import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { PlaneImage } from '../PlaneImage/PlaneImage'
 import { Airplane } from '../../../types/Airplane'
 import c from 'classnames'
+import { PlaneInformationList } from '../PlaneInformation/PlaneInformationList'
+import { PlaneInformationItem } from '../PlaneInformation/PlaneInformationItem'
 
 interface Props {
     airplane: Airplane
@@ -16,23 +17,56 @@ interface Props {
 export class PlaneCard extends React.Component<Props> {
     public render() {
         const { airplane } = this.props
+        const airplaneInformation = [
+            {
+                label: 'Role',
+                text: airplane.role,
+            },
+            {
+                label: 'Origin',
+                text: airplane.origin,
+            },
+            {
+                label: 'Manufactured by',
+                text: airplane.manufacturedBy,
+            },
+            {
+                label: 'First flight date',
+                text: airplane.firstFlight,
+            },
+            {
+                label: 'Usage status',
+                text: airplane.usageStatus,
+            },
+            {
+                label: 'Primary users',
+                text: airplane.primaryUsers,
+            },
+            {
+                label: 'Production years',
+                text: airplane.productionYears,
+            },
+            {
+                label: 'Amount built',
+                text: airplane.amountBuilt,
+            },
+        ]
 
         return (
             <Card className={this.getClassName()}>
-                <CardActionArea>
-                    {airplane.imageSrc && (
-                        <PlaneImage airplane={airplane}/>
-                    )}
-                    <CardContent>
-                        <Typography gutterBottom={true} variant={`h5`} component={`h2`}>
-                            {airplane.title}
-                        </Typography>
-                        <Typography component={`p`}>
-                            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                            across all continents except Antarctica
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
+                {airplane.imageSrc && (
+                    <PlaneImage airplane={airplane}/>
+                )}
+                <CardContent>
+                    <Typography gutterBottom={true} variant={`h5`} component={`h2`}>
+                        {airplane.title}
+                    </Typography>
+                    <PlaneInformationList>
+                        {airplaneInformation.map(info => (
+                            <PlaneInformationItem key={info.label} content={info}/>
+                        ))}
+                    </PlaneInformationList>
+                </CardContent>
             </Card>
         )
     }

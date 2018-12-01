@@ -4,6 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { PlaneCard } from '../components/Planes/PlaneCard/PlaneCard'
 import { PlaneGrid } from '../components/Planes/PlaneGrid/PlaneGrid'
 import { Page } from '../components/Layout/Page'
+import Typography from '@material-ui/core/Typography'
 
 interface Props {}
 
@@ -35,9 +36,14 @@ export class RootView extends React.Component<Props, State> {
                     <CircularProgress />
                 )}
                 {canShowContent && (
-                    <PlaneGrid>
-                        {this.renderPlanes()}
-                    </PlaneGrid>
+                    <React.Fragment>
+                        <Typography component={`h1`} variant={`h3`} gutterBottom={true}>
+                            Wikipedia Airplanes
+                        </Typography>
+                        <PlaneGrid>
+                            {this.renderPlanes()}
+                        </PlaneGrid>
+                    </React.Fragment>
                 )}
             </Page>
         )
