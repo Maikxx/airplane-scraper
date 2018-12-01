@@ -1,0 +1,11 @@
+.asa-PlaneGrid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: -12px;
+
+    > * {
+        margin: 12px;
+    }
+}

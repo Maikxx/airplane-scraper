@@ -1,7 +1,9 @@
 import * as React from 'react'
 import { Airplane } from '../types/Airplane'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { PlaneCard } from '../components/PlaneCard/PlaneCard'
+import { PlaneCard } from '../components/Planes/PlaneCard/PlaneCard'
+import { PlaneGrid } from '../components/Planes/PlaneGrid/PlaneGrid'
+import { Page } from '../components/Layout/Page'
 
 interface Props {}
 
@@ -25,16 +27,27 @@ export class RootView extends React.Component<Props, State> {
 
     public render() {
         const { airplanes, loading } = this.state
+        const canShowContent = !loading && !!airplanes
 
         return (
-            <div className={`asa-RootView`}>
-                {loading && (
+            <Page className={`asa-RootView`}>
+                {!canShowContent && (
                     <CircularProgress />
                 )}
-                {!loading && airplanes && airplanes.map((airplane, i) => (
-                    <PlaneCard airplane={airplane} key={i} />
-                ))}
-            </div>
+                {canShowContent && (
+                    <PlaneGrid>
+                        {this.renderPlanes()}
+                    </PlaneGrid>
+                )}
+            </Page>
         )
+    }
+
+    private renderPlanes = () => {
+        const { airplanes } = this.state
+
+        return airplanes.map((airplane, i) => (
+            <PlaneCard airplane={airplane} key={i}/>
+        ))
     }
 }

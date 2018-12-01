@@ -5,10 +5,12 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { PlaneImage } from '../PlaneImage/PlaneImage'
-import { Airplane } from '../../types/Airplane'
+import { Airplane } from '../../../types/Airplane'
+import c from 'classnames'
 
 interface Props {
     airplane: Airplane
+    className?: string
 }
 
 export class PlaneCard extends React.Component<Props> {
@@ -16,7 +18,7 @@ export class PlaneCard extends React.Component<Props> {
         const { airplane } = this.props
 
         return (
-            <Card className={`asa-PlaneCard`}>
+            <Card className={this.getClassName()}>
                 <CardActionArea>
                     {airplane.imageSrc && (
                         <PlaneImage airplane={airplane}/>
@@ -33,5 +35,11 @@ export class PlaneCard extends React.Component<Props> {
                 </CardActionArea>
             </Card>
         )
+    }
+
+    private getClassName = () => {
+        const { className } = this.props
+
+        return c('asa-PlaneCard', {}, className)
     }
 }
