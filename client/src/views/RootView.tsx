@@ -3,8 +3,8 @@ import { Airplane } from '../types/Airplane'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { PlaneCard } from '../components/Planes/PlaneCard/PlaneCard'
 import { PlaneGrid } from '../components/Planes/PlaneGrid/PlaneGrid'
-import { Page } from '../components/Layout/Page'
-import Typography from '@material-ui/core/Typography'
+import { Page } from '../components/Layout/Page/Page'
+import { PageHeader } from '../components/Layout/PageHeader/PageHeader'
 
 interface Props {}
 
@@ -32,18 +32,14 @@ export class RootView extends React.Component<Props, State> {
 
         return (
             <Page className={`asa-RootView`}>
+                <PageHeader />
                 {!canShowContent && (
-                    <CircularProgress />
+                    <CircularProgress className={`asa-Loader`}/>
                 )}
                 {canShowContent && (
-                    <React.Fragment>
-                        <Typography component={`h1`} variant={`h3`} gutterBottom={true}>
-                            Wikipedia Airplanes
-                        </Typography>
-                        <PlaneGrid>
-                            {this.renderPlanes()}
-                        </PlaneGrid>
-                    </React.Fragment>
+                    <PlaneGrid>
+                        {this.renderPlanes()}
+                    </PlaneGrid>
                 )}
             </Page>
         )
