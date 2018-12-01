@@ -9,34 +9,4 @@
         color: #ffffff;
         margin-right: 24px;
     }
-
-    &__search {
-        position: relative;
-        border-radius: 4px;
-        background-color: rgba(255, 255, 255, 0.15);
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.25);
-        }
-    }
-
-    &__search-icon {
-        height: 100%;
-        position: absolute;
-        pointer-events: none;
-        left: 12px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-
-    &__input-root {
-        color: inherit!important;
-        width: 100%;
-    }
-
-    &__input-input {
-        padding: 6px 6px 6px 48px!important;
-    }
 }
