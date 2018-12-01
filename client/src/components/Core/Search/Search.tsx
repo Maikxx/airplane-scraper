@@ -6,6 +6,7 @@ import c from 'classnames'
 
 interface Props {
     className?: string
+    onSearch: (searchText?: string) => void
 }
 
 export class Search extends React.Component<Props> {
@@ -21,9 +22,18 @@ export class Search extends React.Component<Props> {
                         input: `asa-Search__input-input`,
                         root: `asa-Search__input-root`,
                     }}
+                    onKeyUp={this.onInputChange}
                 />
             </div>
         )
+    }
+
+    private onInputChange = (event: React.KeyboardEvent) => {
+        const { onSearch } = this.props
+        const target = event.target as HTMLInputElement
+        const { value } = target
+
+        onSearch(value)
     }
 
     private getClassName = () => {

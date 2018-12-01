@@ -10,12 +10,14 @@ interface Props {}
 
 interface State {
     airplanes: Airplane[]
+    filteredAirplanes: Airplane[]
     loading: boolean
 }
 
 export class RootView extends React.Component<Props, State> {
     public state: State = {
         airplanes: [],
+        filteredAirplanes: [],
         loading: true,
     }
 
@@ -32,7 +34,7 @@ export class RootView extends React.Component<Props, State> {
 
         return (
             <Page className={`asa-RootView`}>
-                <PageHeader />
+                <PageHeader onSearch={this.onSearch}/>
                 {!canShowContent && (
                     <CircularProgress className={`asa-Loader`}/>
                 )}
@@ -45,11 +47,37 @@ export class RootView extends React.Component<Props, State> {
         )
     }
 
-    private renderPlanes = () => {
+    private onSearch = (searchText?: string) => {
         const { airplanes } = this.state
 
-        return airplanes.map((airplane, i) => (
+        this.setState({ loading: true })
+
+        if (!airplanes) {
+            return null
+        }
+
+        const filteredAirplanes = airplanes.filter(airplane => {
+            return airplane.title
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+        })
+
+        this.setState({ filteredAirplanes, loading: false })
+    }
+
+    private renderPlanes = () => {
+        const { airplanes, filteredAirplanes } = this.state
+
+        if (filteredAirplanes.length > 0) {
+            return filteredAirplanes.map(this.renderPlane)
+        }
+
+        return airplanes.map(this.renderPlane)
+    }
+
+    private renderPlane = (airplane: Airplane, i: number) => {
+        return (
             <PlaneCard airplane={airplane} key={i}/>
-        ))
+        )
     }
 }

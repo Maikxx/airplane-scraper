@@ -7,10 +7,13 @@ import { Search } from '../../Core/Search/Search'
 
 interface Props {
     className?: string
+    onSearch: (searchText?: string) => void
 }
 
 export class PageHeader extends React.Component<Props> {
     public render() {
+        const { onSearch } = this.props
+
         return (
             <AppBar position={`sticky`} className={this.getClassName()}>
                 <Typography
@@ -20,7 +23,7 @@ export class PageHeader extends React.Component<Props> {
                 >
                     Wikipedia Airplanes
                 </Typography>
-                <Search />
+                <Search onSearch={onSearch}/>
             </AppBar>
         )
     }
