@@ -1,5 +1,5 @@
 import * as request from 'request-promise'
-import { cleanText, convertToNumber, capitalizeFirstLetter } from '../transformers'
+import { cleanText, capitalizeFirstLetter } from '../transformers'
 import { getQueryOptions } from '../queries'
 import { dataFile } from '../..'
 

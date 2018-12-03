@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { scrapeCivilAirplaneUrls } from './api/scrapers/civilAirplaneUrls'
+import { scrapeCivilAirplaneUrls } from './server/scrapers/civilAirplaneUrls'
 
 export const dataFile = fs.createWriteStream('data/planes.json')
 
