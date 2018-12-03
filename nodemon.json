@@ -1,5 +1,5 @@
 {
-    "watch": ["index.ts", "api"],
+    "watch": ["index.ts", "server"],
     "ext": "ts",
     "env": {
         "NODE_ENV": "development"

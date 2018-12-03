@@ -1,5 +1,6 @@
 # Development
 node_modules/
+.env
 
 # Misc
 .DS_Store
