@@ -10,16 +10,15 @@ interface Props {}
 
 interface State {
     airplanes: Airplane[]
-    filteredAirplanes: Airplane[]
     loading: boolean
     hasNextPage?: boolean
     page: number
+    searchText?: string
 }
 
 export class RootView extends React.Component<Props, State> {
     public state: State = {
         airplanes: [],
-        filteredAirplanes: [],
         loading: true,
         hasNextPage: undefined,
         page: 0,
@@ -74,14 +73,25 @@ export class RootView extends React.Component<Props, State> {
         )
     }
 
+    private queryData = async () => {
+        const { searchText, page } = this.state
+        const { limit } = this
+
+        const hasSearchText = !!searchText
+        const searchQueryUrlPart = hasSearchText ? '/search' : ''
+        const searchTextQueryUrlPart = hasSearchText ? `&searchText=${searchText}` : ''
+        const url = `http://localhost:5000/api/airplanes${searchQueryUrlPart}?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
+        const response = await fetch(url)
+        return await response.json()
+    }
+
     private fetchMoreData = () => {
         const { airplanes, page, hasNextPage } = this.state
         const { limit } = this
 
         if (hasNextPage) {
             this.setState({ loading: true }, async () => {
-                const response = await fetch(`http://localhost:5000/api/airplanes?limit=${limit}&page=${page}`)
-                const data = await response.json()
+                const data = await this.queryData()
 
                 this.setState({
                     airplanes: airplanes.concat(data.nodes),
@@ -93,30 +103,30 @@ export class RootView extends React.Component<Props, State> {
         }
     }
 
-    private onSearch = (searchText?: string) => {
-        const { airplanes } = this.state
+    private onSearch = async (searchText?: string) => {
+        const { limit } = this
 
-        this.setState({ loading: true })
+        await this.setState({ airplanes: [], page: 0, loading: true, searchText }, async () => {
+            if (!searchText) {
+                await this.queryData()
+                return null
+            }
 
-        if (!airplanes) {
-            return null
-        }
+            const { page } = this.state
+            const response = await fetch(`http://localhost:5000/api/airplanes/search?limit=${limit}&page=${page}&searchText=${searchText}`)
+            const data = await response.json()
 
-        const filteredAirplanes = airplanes.filter(airplane => {
-            return airplane.title
-                .toLowerCase()
-                .includes(searchText.toLowerCase())
+            this.setState({
+                airplanes: data.nodes,
+                loading: false,
+                hasNextPage: data.hasNextPage,
+                page: page + 1,
+            })
         })
-
-        this.setState({ filteredAirplanes, loading: false })
     }
 
     private renderPlanes = () => {
-        const { airplanes, filteredAirplanes } = this.state
-
-        if (filteredAirplanes.length > 0) {
-            return filteredAirplanes.map(this.renderPlane)
-        }
+        const { airplanes } = this.state
 
         return airplanes.map(this.renderPlane)
     }
