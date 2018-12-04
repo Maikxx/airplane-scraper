@@ -13,6 +13,7 @@
     "serve": "yarn clearDist && parcel client/index.html"
   },
   "devDependencies": {
+    "@types/query-string": "^6.1.1",
     "@types/react": "^16.7.10",
     "@types/react-dom": "^16.0.11",
     "autoprefixer": "^9.3.1",
@@ -33,7 +34,9 @@
     "@types/classnames": "^2.2.6",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.6",
+    "query-string": "^6.2.0",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "react-infinite-scroll-component": "^4.2.0"
   }
 }
