@@ -37,12 +37,6 @@ const port = process.env.PORT
 
     app.use('/api/airplanes', airplaneRoutes)
 
-    // app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    //     const error = new Error('Route not found!')
-    //     error.name = 'RouteError'
-    //     next(error)
-    // })
-
     ; (async () => {
         const server = http.createServer(app)
         await promisify(server.listen.bind(server))(port)
