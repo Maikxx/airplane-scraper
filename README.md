@@ -2,6 +2,9 @@
 
 A scraper for getting structured data from the wikipedia pages of a lot of commercial airplanes.
 
+**Warning**
+Due to the large amount of requests, it is smart not to run `yarn start-server` on cellular.
+
 ## Installation
 
 * Clone the repository: `git clone git@github.com:Maikxx/airplane-scraper.git`
