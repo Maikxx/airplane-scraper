@@ -35,22 +35,22 @@ export const get = (req: express.Request, res: express.Response, next: express.N
 
     Airplane.countDocuments(filters, (err, count) => {
         Airplane.find(filters)
-                .skip(page * limit)
-                .limit(limit)
-                .exec((err, docs) => {
-                    if (err) {
-                        res.status(500).json(err)
-                        return
-                    }
+            .skip(page * limit)
+            .limit(limit)
+            .exec((err, docs) => {
+                if (err) {
+                    res.status(500).json(err)
+                    return
+                }
 
-                    const hasNextPage = page < count / 20
-                    const response = {
-                        totalCount: count,
-                        hasNextPage,
-                        nodes: docs,
-                    }
+                const hasNextPage = page < count / 20
+                const response = {
+                    totalCount: count,
+                    hasNextPage,
+                    nodes: docs,
+                }
 
-                    res.status(200).json(response)
-                })
+                res.status(200).json(response)
+            })
     })
 }
