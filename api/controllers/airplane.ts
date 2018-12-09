@@ -1,10 +1,14 @@
 import * as express from 'express'
+import { capitalize } from '../utils/string'
 const Airplane = require('../models/airplane')
 
 export const get = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const page = req.query.page !== undefined && parseInt(req.query.page, 10) || 0
-    const limit = req.query.limit !== undefined && parseInt(req.query.limit, 10) || 20
-    const search = req.query.searchText && `${req.query.searchText[0].toUpperCase()}${req.query.searchText.slice(1)}`
+    const { query } = req
+    const { page: queryPage, limit: queryLimit, searchText } = query
+
+    const page = queryPage && parseInt(queryPage, 10) || 0
+    const limit = queryLimit && parseInt(queryLimit, 10) || 20
+    const search = searchText && capitalize(searchText)
 
     const filters = {
         ...(!!search && { title: { $regex: search }}),
