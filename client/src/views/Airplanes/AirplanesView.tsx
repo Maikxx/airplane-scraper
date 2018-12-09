@@ -4,8 +4,8 @@ import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
 import { AirplaneCard } from '../../components/Airplanes/AirplaneCard/AirplaneCard'
 import { query } from '../../utils/query'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { Loader } from '../../components/Core/Feedback/Loader/Loader'
 
 interface Props {}
 
@@ -48,14 +48,14 @@ export class AirplanesView extends React.Component<Props> {
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
                 {!canShowContent && (
-                    <CircularProgress className={`asa-Loader`}/>
+                    <Loader />
                 )}
                 {!!airplanes && (
                     <InfiniteScroll
                         dataLength={airplanes.length}
                         hasMore={hasNextPage}
                         next={this.fetchMoreData}
-                        loader={<CircularProgress className={`asa-Loader`}/>}
+                        loader={<Loader />}
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
