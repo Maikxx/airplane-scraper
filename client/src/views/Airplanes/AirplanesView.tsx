@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
-import { query, QueryFilters } from '../../utils/query'
+import { airplaneQuery, AirplaneQueryFilters } from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
@@ -16,7 +16,7 @@ interface State {
     loading: boolean
     page: number
     searchText?: string
-    filters?: QueryFilters
+    filters?: AirplaneQueryFilters
 }
 
 export class AirplanesView extends React.Component<Props> {
@@ -33,7 +33,7 @@ export class AirplanesView extends React.Component<Props> {
 
     public async componentDidMount() {
         const { page } = this.state
-        const data = await query(this.getCurrentQueryOptions())
+        const data = await airplaneQuery(this.getCurrentQueryOptions())
 
         this.setState({
             airplanes: data.nodes,
@@ -92,7 +92,7 @@ export class AirplanesView extends React.Component<Props> {
 
         if (hasNextPage) {
             this.setState({ loading: true }, async () => {
-                const data = await query(this.getCurrentQueryOptions())
+                const data = await airplaneQuery(this.getCurrentQueryOptions())
 
                 this.setState({
                     airplanes: airplanes.concat(data.nodes),
@@ -107,7 +107,7 @@ export class AirplanesView extends React.Component<Props> {
     private onSearch = (searchText?: string) => {
         this.setState({ airplanes: [], page: 0, loading: true, searchText }, async () => {
             const { page } = this.state
-            const data = await query(this.getCurrentQueryOptions())
+            const data = await airplaneQuery(this.getCurrentQueryOptions())
 
             this.setState({
                 airplanes: data.nodes,
@@ -118,10 +118,10 @@ export class AirplanesView extends React.Component<Props> {
         })
     }
 
-    private onFilter = (filters: QueryFilters) => {
+    private onFilter = (filters: AirplaneQueryFilters) => {
         this.setState({ airplanes: [], page: 0, loading: true, filters }, async () => {
             const { page } = this.state
-            const data = await query(this.getCurrentQueryOptions())
+            const data = await airplaneQuery(this.getCurrentQueryOptions())
 
             this.setState({
                 airplanes: data.nodes,

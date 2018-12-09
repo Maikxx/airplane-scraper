@@ -1,10 +1,10 @@
 import { Airplane } from '../types/Airplane'
 
-interface QueryOptions {
+interface AirplaneQueryOptions {
     limit: number
     page: number
     searchText?: string
-    filters?: QueryFilters
+    filters?: AirplaneQueryFilters
 }
 
 export interface PaginatedQueryResults<NodeType> {
@@ -12,12 +12,12 @@ export interface PaginatedQueryResults<NodeType> {
     nodes?: NodeType[]
 }
 
-export interface QueryFilters {
+export interface AirplaneQueryFilters {
     filterByAirplaneHasImages?: boolean
     filterByAirplaneRole?: string
 }
 
-export const query = async ({ searchText, page, limit, filters }: QueryOptions): Promise<PaginatedQueryResults<Airplane>> => {
+export const airplaneQuery = async ({ searchText, page, limit, filters }: AirplaneQueryOptions): Promise<PaginatedQueryResults<Airplane>> => {
     const urlBase = 'http://localhost:5000/api/airplanes'
     const searchTextParam = searchText
         ? `&searchText=${searchText}`

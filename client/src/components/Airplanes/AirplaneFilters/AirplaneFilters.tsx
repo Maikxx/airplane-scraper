@@ -5,15 +5,15 @@ import { Filters } from '../../Core/DataEntry/Filters/Filters'
 import { Form } from '../../Core/DataEntry/Form/Form'
 import FormGroup from '@material-ui/core/FormGroup'
 import { ImageFilter } from './FilterTypes/ImageFilter'
-import { QueryFilters } from '../../../utils/query'
+import { AirplaneQueryFilters } from '../../../utils/query'
 import { RoleFilter } from './FilterTypes/RoleFilter'
 
 interface Props {
     className?: string
-    onChangeFilter?: (filters: QueryFilters) => void
+    onChangeFilter?: (filters: AirplaneQueryFilters) => void
 }
 
-interface State extends QueryFilters {}
+interface State extends AirplaneQueryFilters {}
 
 export class AirplaneFilters extends React.Component<Props, State> {
     public state: State = {
