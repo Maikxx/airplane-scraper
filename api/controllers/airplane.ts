@@ -40,7 +40,7 @@ export const get = (req: express.Request, res: express.Response, next: express.N
             .exec((err, docs) => {
                 if (err) {
                     res.status(500).json(err)
-                    return
+                    return null
                 }
 
                 const hasNextPage = page < count / 20
