@@ -4,6 +4,7 @@ import c from 'classnames'
 
 interface Props {
     className?: string
+    hasPageHeader?: boolean
 }
 
 export class Page extends React.Component<Props> {
@@ -18,8 +19,10 @@ export class Page extends React.Component<Props> {
     }
 
     private getClassName = () => {
-        const { className } = this.props
+        const { className, hasPageHeader } = this.props
 
-        return c('asa-Page', {}, className)
+        return c('asa-Page', {
+            'asa-Page--has-page-header': hasPageHeader,
+        }, className)
     }
 }

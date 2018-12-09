@@ -5,13 +5,14 @@ import { PlaneCard } from '../components/Planes/PlaneCard/PlaneCard'
 import { Page } from '../components/Layout/Page/Page'
 import { PageHeader } from '../components/Layout/PageHeader/PageHeader'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { query } from '../utils/query'
 
 interface Props {}
 
 interface State {
     airplanes: Airplane[]
-    loading: boolean
     hasNextPage?: boolean
+    loading: boolean
     page: number
     searchText?: string
 }
@@ -19,8 +20,8 @@ interface State {
 export class RootView extends React.Component<Props, State> {
     public state: State = {
         airplanes: [],
-        loading: true,
         hasNextPage: undefined,
+        loading: true,
         page: 0,
     }
 
@@ -35,8 +36,8 @@ export class RootView extends React.Component<Props, State> {
 
         this.setState({
             airplanes: data.nodes,
-            loading: false,
             hasNextPage: data.hasNextPage,
+            loading: false,
             page: page + 1,
         })
     }
@@ -46,7 +47,7 @@ export class RootView extends React.Component<Props, State> {
         const canShowContent = !loading && !!airplanes
 
         return (
-            <Page className={`asa-RootView`}>
+            <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
                 {!canShowContent && (
                     <CircularProgress className={`asa-Loader`}/>
@@ -60,8 +61,8 @@ export class RootView extends React.Component<Props, State> {
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
                             flexWrap: 'wrap',
+                            justifyContent: 'space-between',
                             margin: '-6px',
                             padding: '12px',
                         }}
@@ -73,35 +74,17 @@ export class RootView extends React.Component<Props, State> {
         )
     }
 
-    private queryData = async () => {
-        const { searchText, page } = this.state
-        const { limit } = this
-
-        const hasSearchText = !!searchText
-        const searchQueryUrlPart = hasSearchText
-            ? '/search'
-            : ''
-
-        const searchTextQueryUrlPart = hasSearchText
-            ? `&searchText=${searchText}`
-            : ''
-
-        const url = `http://localhost:5000/api/airplanes${searchQueryUrlPart}?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
-        const response = await fetch(url)
-        return await response.json()
-    }
-
     private fetchMoreData = () => {
         const { airplanes, page, hasNextPage } = this.state
 
         if (hasNextPage) {
             this.setState({ loading: true }, async () => {
-                const data = await this.queryData()
+                const data = await query(this.getCurrentQueryOptions())
 
                 this.setState({
                     airplanes: airplanes.concat(data.nodes),
-                    loading: false,
                     hasNextPage: data.hasNextPage,
+                    loading: false,
                     page: page + 1,
                 })
             })
@@ -109,36 +92,37 @@ export class RootView extends React.Component<Props, State> {
     }
 
     private onSearch = async (searchText?: string) => {
-        const { limit } = this
-
         await this.setState({ airplanes: [], page: 0, loading: true, searchText }, async () => {
-            if (!searchText) {
-                await this.queryData()
-                return null
-            }
-
             const { page } = this.state
-            const response = await fetch(`http://localhost:5000/api/airplanes/search?limit=${limit}&page=${page}&searchText=${searchText}`)
-            const data = await response.json()
+            const data = await query(this.getCurrentQueryOptions())
 
             this.setState({
                 airplanes: data.nodes,
-                loading: false,
                 hasNextPage: data.hasNextPage,
+                loading: false,
                 page: page + 1,
             })
         })
     }
 
+    private getCurrentQueryOptions = () => {
+        const { page, searchText } = this.state
+
+        return {
+            limit: this.limit,
+            page,
+            searchText,
+        }
+    }
+
     private renderPlanes = () => {
         const { airplanes } = this.state
 
-        return airplanes.map(this.renderPlane)
-    }
-
-    private renderPlane = (airplane: Airplane, i: number) => {
-        return (
-            <PlaneCard airplane={airplane} key={i}/>
-        )
+        return airplanes.map((airplane, i) => (
+            <PlaneCard
+                airplane={airplane}
+                key={i}
+            />
+        ))
     }
 }
