@@ -3,6 +3,7 @@
 
     &__header {
         position: relative;
+        align-items: center;
 
         &::after {
             background-color: $color-subtle;
@@ -18,8 +19,13 @@
         }
     }
 
+    &__icon {
+        margin-top: -1px;
+    }
+
     &__text {
         font-weight: 600!important;
+        padding-left: 6px;
     }
 
     &__content {

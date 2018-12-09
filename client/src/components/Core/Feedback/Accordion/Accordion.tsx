@@ -4,6 +4,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import FilterIcon from '@material-ui/icons/FilterList'
 import Typography from '@material-ui/core/Typography'
 import c from 'classnames'
 
@@ -33,6 +34,7 @@ export class Accordion extends React.Component<Props, State> {
                     className={`asa-Accordion__header`}
                     expandIcon={<ExpandMoreIcon />}
                 >
+                    <FilterIcon className={`asa-Accordion__icon`}/>
                     <Typography
                         className={`asa-Accordion__text`}
                         variant={`subheading`}
