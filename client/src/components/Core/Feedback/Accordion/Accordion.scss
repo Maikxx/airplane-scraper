@@ -1,1 +1,36 @@
-.asa-Accordion {}
+.asa-Accordion {
+    @import '../../../../styles/variables/colors';
+
+    &__header {
+        position: relative;
+
+        &::after {
+            background-color: $color-subtle;
+            bottom: 0;
+            content: '';
+            display: block;
+            height: 2px;
+            left: 24px;
+            position: absolute;
+            right: 24px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    }
+
+    &__text {
+        font-weight: 600!important;
+    }
+
+    &__content {
+        padding: 20px 24px!important;
+    }
+
+    &--is-expanded {
+        .asa-Accordion__header {
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+}

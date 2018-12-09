@@ -1,7 +1,7 @@
 import './AirplaneFilters.scss'
 import * as React from 'react'
 import c from 'classnames'
-import { Filters } from '../../DataEntry/Filters/Filters'
+import { Filters } from '../../Core/DataEntry/Filters/Filters'
 
 interface Props {
     className?: string

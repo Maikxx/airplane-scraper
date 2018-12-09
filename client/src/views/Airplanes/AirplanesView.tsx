@@ -1,11 +1,15 @@
 import * as React from 'react'
+
 import { Airplane } from '../../types/Airplane'
+import { query } from '../../utils/query'
+
+import InfiniteScroll from 'react-infinite-scroll-component'
+
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
 import { AirplaneCard } from '../../components/Airplanes/AirplaneCard/AirplaneCard'
-import { query } from '../../utils/query'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { Loader } from '../../components/Core/Feedback/Loader/Loader'
+import { AirplaneFilters } from '../../components/Airplanes/AirplaneFilters/AirplaneFilters'
 
 interface Props {}
 
@@ -47,6 +51,9 @@ export class AirplanesView extends React.Component<Props> {
         return (
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
+                <AirplaneFilters>
+                    Hello world
+                </AirplaneFilters>
                 {!canShowContent && (
                     <Loader />
                 )}

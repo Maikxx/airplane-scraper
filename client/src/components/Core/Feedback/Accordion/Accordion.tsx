@@ -12,27 +12,51 @@ interface Props {
     className?: string
 }
 
-export class Accordion extends React.Component<Props> {
+interface State {
+    isExpanded: boolean
+}
+
+export class Accordion extends React.Component<Props, State> {
+    public state: State = {
+        isExpanded: false,
+    }
+
     public render() {
         const { buttonText, children } = this.props
 
         return (
-            <ExpansionPanel className={this.getClassName()}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>
+            <ExpansionPanel
+                className={this.getClassName()}
+                onChange={this.onChange}
+            >
+                <ExpansionPanelSummary
+                    className={`asa-Accordion__header`}
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography
+                        className={`asa-Accordion__text`}
+                        variant={`subheading`}
+                    >
                         {buttonText}
                     </Typography>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetails className={`asa-Accordion__content`}>
                     {children}
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         )
     }
 
+    private onChange = (event: any, expanded: boolean) => {
+        this.setState({ isExpanded: expanded })
+    }
+
     private getClassName = () => {
         const { className } = this.props
+        const { isExpanded } = this.state
 
-        return c('asa-Accordion', {}, className)
+        return c('asa-Accordion', {
+            'asa-Accordion--is-expanded': isExpanded,
+        }, className)
     }
 }
