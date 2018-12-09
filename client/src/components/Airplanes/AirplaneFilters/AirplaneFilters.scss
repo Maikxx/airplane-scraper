@@ -1,4 +1,12 @@
 .asa-AirplaneFilters {
     max-width: calc(100% - 24px);
     margin: 12px auto 0!important;
+
+    &__filter + .asa-AirplaneFilters__filter {
+        margin-left: 24px!important;
+    }
+
+    .asa-Select {
+        margin-top: -8px!important;
+    }
 }

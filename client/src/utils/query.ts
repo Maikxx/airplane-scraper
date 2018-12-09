@@ -14,6 +14,7 @@ export interface PaginatedQueryResults<NodeType> {
 
 export interface QueryFilters {
     filterByAirplaneHasImages?: boolean
+    filterByAirplaneRole?: string
 }
 
 export const query = async ({ searchText, page, limit, filters }: QueryOptions): Promise<PaginatedQueryResults<Airplane>> => {

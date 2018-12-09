@@ -6,6 +6,7 @@ import { Form } from '../../Core/DataEntry/Form/Form'
 import FormGroup from '@material-ui/core/FormGroup'
 import { ImageFilter } from './FilterTypes/ImageFilter'
 import { QueryFilters } from '../../../utils/query'
+import { RoleFilter } from './FilterTypes/RoleFilter'
 
 interface Props {
     className?: string
@@ -17,6 +18,7 @@ interface State extends QueryFilters {}
 export class AirplaneFilters extends React.Component<Props, State> {
     public state: State = {
         filterByAirplaneHasImages: false,
+        filterByAirplaneRole: '',
     }
 
     public render() {
@@ -24,7 +26,14 @@ export class AirplaneFilters extends React.Component<Props, State> {
             <Filters className={this.getClassName()}>
                 <Form>
                     <FormGroup row={true}>
-                        <ImageFilter onChange={this.onImageFilterChange}/>
+                        <ImageFilter
+                            className={`asa-AirplaneFilters__filter`}
+                            onChange={this.onImageFilterChange}
+                        />
+                        <RoleFilter
+                            className={`asa-AirplaneFilters__filter asa-Select`}
+                            onChange={this.onSelectFilterChange}
+                        />
                         {/* <FormControlLabel
                             control={<ImageFilter />}
                             label={`Role`}
@@ -66,11 +75,22 @@ export class AirplaneFilters extends React.Component<Props, State> {
         })
     }
 
+    private onSelectFilterChange = (name: string, value: string) => {
+        const { onChangeFilter } = this.props
+
+        this.setState({ [name]: value }, () => {
+            if (onChangeFilter) {
+                onChangeFilter(this.getFilters())
+            }
+        })
+    }
+
     private getFilters = () => {
-        const { filterByAirplaneHasImages } = this.state
+        const { filterByAirplaneHasImages, filterByAirplaneRole } = this.state
 
         return {
             filterByAirplaneHasImages,
+            filterByAirplaneRole,
         }
     }
 

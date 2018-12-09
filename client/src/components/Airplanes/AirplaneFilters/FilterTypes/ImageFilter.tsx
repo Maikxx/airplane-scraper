@@ -3,6 +3,7 @@ import Switch from '@material-ui/core/Switch'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 interface Props {
+    className?: string
     onChange?: (name: string, checked: boolean) => void
 }
 
@@ -16,9 +17,12 @@ export class ImageFilter extends React.Component<Props, State> {
     }
 
     public render() {
+        const { className } = this.props
+
         return (
             <FormControlLabel
                 control={this.renderControl()}
+                className={className}
                 label={`Has image`}
                 labelPlacement={`start`}
             />
