@@ -21,7 +21,7 @@ export class AirplaneInformationContent extends React.Component<Props> {
         const { label, text } = content
         const textShouldBeNewList = Array.isArray(text) && text.length > 1
 
-        if (!text) {
+        if (!text || !text.length) {
             return null
         }
 
