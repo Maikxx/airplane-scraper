@@ -11,6 +11,7 @@ import { RoleFilter } from './FilterTypes/RoleFilter'
 interface Props {
     className?: string
     onChangeFilter?: (filters: AirplaneQueryFilters) => void
+    roles?: string[]
 }
 
 interface State extends AirplaneQueryFilters {}
@@ -22,6 +23,8 @@ export class AirplaneFilters extends React.Component<Props, State> {
     }
 
     public render() {
+        const { roles } = this.props
+
         return (
             <Filters className={this.getClassName()}>
                 <Form>
@@ -33,6 +36,7 @@ export class AirplaneFilters extends React.Component<Props, State> {
                         <RoleFilter
                             className={`asa-AirplaneFilters__filter asa-Select`}
                             onChange={this.onSelectFilterChange}
+                            roles={roles}
                         />
                     </FormGroup>
                 </Form>

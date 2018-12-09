@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 interface Props {
     className?: string
     onChange?: (name: string, value: string | number) => void
+    roles?: string[]
 }
 
 interface State {
@@ -19,19 +20,23 @@ export class RoleFilter extends React.Component<Props, State> {
     }
 
     public render() {
-        const { className } = this.props
+        const { className, roles } = this.props
+
+        if (!roles || !roles.length) {
+            return null
+        }
 
         return (
             <FormControl className={className}>
                 <InputLabel htmlFor={`filterByAirplaneRole`}>
                     Role
                 </InputLabel>
-                {this.renderControl()}
+                {this.renderControl(roles)}
             </FormControl>
         )
     }
 
-    private renderControl = () => {
+    private renderControl = (roles: string[]) => {
         const { currentValue } = this.state
 
         return (
@@ -41,9 +46,14 @@ export class RoleFilter extends React.Component<Props, State> {
                 input={<Input name={`filterByAirplaneRole`} id={`filterByAirplaneRole`} />}
             >
                 <option value={``} disabled={true}/>
-                <option value={'Homebuilt aircraft'}>
-                    HBA
-                </option>
+                {roles
+                    .filter(role => role.length > 0)
+                    .map((role: string, i: number) => (
+                        <option key={i} value={role}>
+                            {role}
+                        </option>
+                    ))
+                }
             </NativeSelect>
         )
     }
@@ -52,7 +62,6 @@ export class RoleFilter extends React.Component<Props, State> {
         const { onChange } = this.props
 
         const { value } = event.target
-        console.log(value)
 
         this.setState({ currentValue: value }, () => {
             if (onChange) {

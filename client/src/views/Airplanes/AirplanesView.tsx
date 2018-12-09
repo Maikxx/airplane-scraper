@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
-import { airplaneQuery, AirplaneQueryFilters } from '../../utils/query'
+import { airplaneQuery, AirplaneQueryFilters, rolesQuery } from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
@@ -12,45 +12,52 @@ interface Props {}
 
 interface State {
     airplanes: Airplane[]
+    filters?: AirplaneQueryFilters
     hasNextPage?: boolean
     loading: boolean
     page: number
+    roles?: string[]
     searchText?: string
-    filters?: AirplaneQueryFilters
 }
 
 export class AirplanesView extends React.Component<Props> {
     public state: State = {
         airplanes: [],
+        filters: {},
         hasNextPage: undefined,
         loading: true,
         page: 0,
+        roles: [],
         searchText: '',
-        filters: {},
     }
 
     private limit = 20
 
     public async componentDidMount() {
         const { page } = this.state
-        const data = await airplaneQuery(this.getCurrentQueryOptions())
+        const roleData = await rolesQuery()
+        const airplaneData = await airplaneQuery(this.getCurrentQueryOptions())
 
         this.setState({
-            airplanes: data.nodes,
-            hasNextPage: data.hasNextPage,
+            airplanes: airplaneData.nodes,
+            hasNextPage: airplaneData.hasNextPage,
             loading: false,
             page: page + 1,
+            roles: roleData,
         })
     }
 
     public render() {
-        const { airplanes, loading, hasNextPage } = this.state
+        const { airplanes, loading, hasNextPage, roles } = this.state
         const canShowContent = !loading && !!airplanes
 
         return (
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
-                <AirplaneFilters onChangeFilter={this.onFilter}/>
+                <AirplaneFilters
+                    roles={roles}
+                    onChangeFilter={this.onFilter}
+                />
                 {!canShowContent && (
                     <Loader />
                 )}

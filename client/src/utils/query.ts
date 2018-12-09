@@ -31,3 +31,9 @@ export const airplaneQuery = async ({ searchText, page, limit, filters }: Airpla
     const response = await fetch(url)
     return response.json()
 }
+
+export const rolesQuery = async (): Promise<string[]> => {
+    const url = `http://localhost:5000/api/airplanes/roles`
+    const response = await fetch(url)
+    return response.json()
+}
