@@ -34,31 +34,6 @@ export class AirplaneFilters extends React.Component<Props, State> {
                             className={`asa-AirplaneFilters__filter asa-Select`}
                             onChange={this.onSelectFilterChange}
                         />
-                        {/* <FormControlLabel
-                            control={<ImageFilter />}
-                            label={`Role`}
-                            labelPlacement={`start`}
-                        />
-                        <FormControlLabel
-                            control={<ImageFilter />}
-                            label={`Origin`}
-                            labelPlacement={`start`}
-                        />
-                        <FormControlLabel
-                            control={<ImageFilter />}
-                            label={`First flight date`}
-                            labelPlacement={`start`}
-                        />
-                        <FormControlLabel
-                            control={<ImageFilter />}
-                            label={`Usage status`}
-                            labelPlacement={`start`}
-                        />
-                        <FormControlLabel
-                            control={<ImageFilter />}
-                            label={`Amount built`}
-                            labelPlacement={`start`}
-                        /> */}
                     </FormGroup>
                 </Form>
             </Filters>
