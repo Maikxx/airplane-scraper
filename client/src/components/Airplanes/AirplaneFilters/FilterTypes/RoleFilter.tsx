@@ -3,6 +3,7 @@ import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
+import { truncateString } from '../../../../utils/string'
 
 interface Props {
     className?: string
@@ -50,7 +51,7 @@ export class RoleFilter extends React.Component<Props, State> {
                     .filter(role => role.length > 0)
                     .map((role: string, i: number) => (
                         <option key={i} value={role}>
-                            {role}
+                            {truncateString(role, 25)}
                         </option>
                     ))
                 }
