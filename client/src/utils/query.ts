@@ -12,16 +12,11 @@ export interface PaginatedQueryResults<NodeType> {
 }
 
 export const query = async ({ searchText, page, limit }: QueryOptions): Promise<PaginatedQueryResults<Airplane>> => {
-    const hasSearchText = !!searchText
-    const searchQueryUrlPart = hasSearchText
-        ? '/search'
-        : ''
-
-    const searchTextQueryUrlPart = hasSearchText
+    const searchTextQueryUrlPart = searchText
         ? `&searchText=${searchText}`
         : ''
 
-    const url = `http://localhost:5000/api/airplanes${searchQueryUrlPart}?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
+    const url = `http://localhost:5000/api/airplanes?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
     const response = await fetch(url)
     return response.json()
 }
