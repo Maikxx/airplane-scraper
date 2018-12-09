@@ -78,8 +78,14 @@ export class RootView extends React.Component<Props, State> {
         const { limit } = this
 
         const hasSearchText = !!searchText
-        const searchQueryUrlPart = hasSearchText ? '/search' : ''
-        const searchTextQueryUrlPart = hasSearchText ? `&searchText=${searchText}` : ''
+        const searchQueryUrlPart = hasSearchText
+            ? '/search'
+            : ''
+
+        const searchTextQueryUrlPart = hasSearchText
+            ? `&searchText=${searchText}`
+            : ''
+
         const url = `http://localhost:5000/api/airplanes${searchQueryUrlPart}?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
         const response = await fetch(url)
         return await response.json()
@@ -87,7 +93,6 @@ export class RootView extends React.Component<Props, State> {
 
     private fetchMoreData = () => {
         const { airplanes, page, hasNextPage } = this.state
-        const { limit } = this
 
         if (hasNextPage) {
             this.setState({ loading: true }, async () => {
