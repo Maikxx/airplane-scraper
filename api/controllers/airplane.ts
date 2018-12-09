@@ -2,23 +2,36 @@ import * as express from 'express'
 import { capitalize } from '../utils/string'
 const Airplane = require('../models/airplane')
 
-export const get = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const { query } = req
-    const { page: queryPage, limit: queryLimit, searchText, filters: queryFilters } = query
+interface QueryFilters {
+    filterByAirplaneHasImages?: boolean
+    filterByAirplaneRole?: string
+}
 
-    const page = queryPage && parseInt(queryPage, 10) || 0
-    const limit = queryLimit && parseInt(queryLimit, 10) || 20
+const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
+    const { searchText } = query
     const search = searchText && capitalize(searchText)
-    const parsedQueryFilters = queryFilters && JSON.parse(queryFilters)
     const filterByAirplaneHasImages = parsedQueryFilters && parsedQueryFilters.filterByAirplaneHasImages
+    const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
 
     const searchFilter = { title: { $regex: search }}
     const filterByAirplaneHasImagesFilter = { imageSrc: { $exists: true, $ne: undefined }}
+    const filterByAirplaneRoleFilter = { role: { $regex: filterByAirplaneRole }}
 
-    const filters = {
-        ...(!!search && searchFilter),
+    return {
+        ...(search && searchFilter),
         ...(filterByAirplaneHasImages && filterByAirplaneHasImagesFilter),
+        ...(filterByAirplaneRole && filterByAirplaneRoleFilter),
     }
+}
+
+export const get = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const { query } = req
+    const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
+
+    const page = queryPage && parseInt(queryPage, 10) || 0
+    const limit = queryLimit && parseInt(queryLimit, 10) || 20
+    const parsedQueryFilters = queryFilters && JSON.parse(queryFilters)
+    const filters = getQueryFilters(query, parsedQueryFilters)
 
     Airplane.countDocuments(filters, (err, count) => {
         Airplane.find(filters)
