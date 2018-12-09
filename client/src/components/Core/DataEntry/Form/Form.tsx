@@ -30,7 +30,7 @@ export class Form extends React.Component<Props> {
     }
 
     public render() {
-        const { children, className, ...restProps } = this.props
+        const { children, className, shouldPreventDefault, onSubmit, ...restProps } = this.props
 
         return (
             <form
