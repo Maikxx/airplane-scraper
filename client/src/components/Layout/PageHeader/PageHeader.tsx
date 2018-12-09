@@ -3,7 +3,7 @@ import * as React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import c from 'classnames'
-import { Search } from '../../DataEntry/Search/Search'
+import { Search } from '../../Core/DataEntry/Search/Search'
 
 interface Props {
     className?: string

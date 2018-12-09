@@ -1,6 +1,6 @@
 import './Filters.scss'
 import * as React from 'react'
-import { Accordion } from '../../Core/Accordion/Accordion'
+import { Accordion } from '../../Feedback/Accordion/Accordion'
 import c from 'classnames'
 
 interface Props {
