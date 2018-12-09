@@ -19,7 +19,7 @@ export class ImageFilter extends React.Component<Props, State> {
         return (
             <FormControlLabel
                 control={this.renderControl()}
-                label={`Image`}
+                label={`Has image`}
                 labelPlacement={`start`}
             />
         )
@@ -42,7 +42,7 @@ export class ImageFilter extends React.Component<Props, State> {
 
         this.setState({ isChecked: checked }, () => {
             if (onChange) {
-                onChange(event.target.name, checked)
+                onChange('filterByAirplaneHasImages', checked)
             }
         })
     }
