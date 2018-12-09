@@ -23,16 +23,14 @@ export class RootView extends React.Component<Props, State> {
         hasNextPage: undefined,
         loading: true,
         page: 0,
+        searchText: '',
     }
 
     private limit = 20
 
     public async componentDidMount() {
         const { page } = this.state
-        const { limit } = this
-
-        const response = await fetch(`http://localhost:5000/api/airplanes?limit=${limit}&page=${page}`)
-        const data = await response.json()
+        const data = await query(this.getCurrentQueryOptions())
 
         this.setState({
             airplanes: data.nodes,
@@ -91,8 +89,8 @@ export class RootView extends React.Component<Props, State> {
         }
     }
 
-    private onSearch = async (searchText?: string) => {
-        await this.setState({ airplanes: [], page: 0, loading: true, searchText }, async () => {
+    private onSearch = (searchText?: string) => {
+        this.setState({ airplanes: [], page: 0, loading: true, searchText }, async () => {
             const { page } = this.state
             const data = await query(this.getCurrentQueryOptions())
 
