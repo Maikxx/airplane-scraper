@@ -15,7 +15,7 @@ interface Props {
     content: AirplaneInformationContentInner
 }
 
-export class AirplaneInformationContent extends React.Component<Props> {
+export class AirplaneInformationContent extends React.PureComponent<Props> {
     public render() {
         const { content } = this.props
         const { label, text } = content
