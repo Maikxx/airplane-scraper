@@ -1,20 +1,20 @@
-import './PlaneCard.scss'
+import './AirplaneCard.scss'
 import * as React from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { PlaneImage } from '../PlaneImage/PlaneImage'
+import { AirplaneImage } from '../AirplaneImage/AirplaneImage'
 import { Airplane } from '../../../types/Airplane'
 import c from 'classnames'
-import { PlaneInformationList } from '../PlaneInformation/PlaneInformationList'
-import { PlaneInformationItem } from '../PlaneInformation/PlaneInformationItem'
+import { AirplaneInformationContent } from '../AirplaneInformation/AirplaneInformationContent'
+import { List } from '@material-ui/core'
 
 interface Props {
     airplane: Airplane
     className?: string
 }
 
-export class PlaneCard extends React.Component<Props> {
+export class AirplaneCard extends React.Component<Props> {
     public render() {
         const { airplane } = this.props
         const airplaneInformation = [
@@ -55,17 +55,24 @@ export class PlaneCard extends React.Component<Props> {
         return (
             <Card className={this.getClassName()}>
                 {airplane.imageSrc && (
-                    <PlaneImage airplane={airplane}/>
+                    <AirplaneImage airplane={airplane}/>
                 )}
                 <CardContent>
-                    <Typography gutterBottom={true} variant={`h5`} component={`h2`}>
+                    <Typography
+                        component={`h2`}
+                        gutterBottom={true}
+                        variant={`h5`}
+                    >
                         {airplane.title}
                     </Typography>
-                    <PlaneInformationList>
+                    <List>
                         {airplaneInformation.map(info => (
-                            <PlaneInformationItem key={info.label} content={info}/>
+                            <AirplaneInformationContent
+                                content={info}
+                                key={info.label}
+                            />
                         ))}
-                    </PlaneInformationList>
+                    </List>
                 </CardContent>
             </Card>
         )
@@ -74,6 +81,6 @@ export class PlaneCard extends React.Component<Props> {
     private getClassName = () => {
         const { className } = this.props
 
-        return c('asa-PlaneCard', {}, className)
+        return c('asa-AirplaneCard', {}, className)
     }
 }

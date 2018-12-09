@@ -1,23 +1,23 @@
-import './PlaneImage.scss'
+import './AirplaneImage.scss'
 import * as React from 'react'
-import CardMedia from '@material-ui/core/CardMedia'
 import { Airplane } from '../../../types/Airplane'
 import c from 'classnames'
+import CardMedia from '@material-ui/core/CardMedia'
 
 interface Props {
     airplane: Airplane
     className?: string
 }
 
-export class PlaneImage extends React.Component<Props> {
+export class AirplaneImage extends React.Component<Props> {
     public render() {
         const { airplane } = this.props
 
         return (
             <CardMedia
+                className={this.getClassName()}
                 image={airplane.imageSrc}
                 title={airplane.title}
-                className={this.getClassName()}
             />
         )
     }
@@ -25,6 +25,6 @@ export class PlaneImage extends React.Component<Props> {
     private getClassName = () => {
         const { className } = this.props
 
-        return c('asa-PlaneImage', {}, className)
+        return c('asa-AirplaneImage', {}, className)
     }
 }

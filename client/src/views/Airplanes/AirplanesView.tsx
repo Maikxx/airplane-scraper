@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
-import { PlaneCard } from '../../components/Planes/PlaneCard/PlaneCard'
+import { AirplaneCard } from '../../components/Airplanes/AirplaneCard/AirplaneCard'
 import { query } from '../../utils/query'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -72,6 +72,17 @@ export class AirplanesView extends React.Component<Props> {
         )
     }
 
+    private renderPlanes = () => {
+        const { airplanes } = this.state
+
+        return airplanes.map((airplane, i) => (
+            <AirplaneCard
+                airplane={airplane}
+                key={i}
+            />
+        ))
+    }
+
     private fetchMoreData = () => {
         const { airplanes, page, hasNextPage } = this.state
 
@@ -111,16 +122,5 @@ export class AirplanesView extends React.Component<Props> {
             page,
             searchText,
         }
-    }
-
-    private renderPlanes = () => {
-        const { airplanes } = this.state
-
-        return airplanes.map((airplane, i) => (
-            <PlaneCard
-                airplane={airplane}
-                key={i}
-            />
-        ))
     }
 }
