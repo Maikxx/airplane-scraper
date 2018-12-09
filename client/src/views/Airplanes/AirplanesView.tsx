@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
-import { query } from '../../utils/query'
+import { query, QueryFilters } from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
@@ -16,6 +16,7 @@ interface State {
     loading: boolean
     page: number
     searchText?: string
+    filters?: QueryFilters
 }
 
 export class AirplanesView extends React.Component<Props> {
@@ -25,6 +26,7 @@ export class AirplanesView extends React.Component<Props> {
         loading: true,
         page: 0,
         searchText: '',
+        filters: {},
     }
 
     private limit = 20
@@ -48,7 +50,7 @@ export class AirplanesView extends React.Component<Props> {
         return (
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
-                <AirplaneFilters/>
+                <AirplaneFilters onChangeFilter={this.onFilter}/>
                 {!canShowContent && (
                     <Loader />
                 )}
@@ -116,13 +118,28 @@ export class AirplanesView extends React.Component<Props> {
         })
     }
 
+    private onFilter = (filters: QueryFilters) => {
+        this.setState({ airplanes: [], page: 0, loading: true, filters }, async () => {
+            const { page } = this.state
+            const data = await query(this.getCurrentQueryOptions())
+
+            this.setState({
+                airplanes: data.nodes,
+                hasNextPage: data.hasNextPage,
+                loading: false,
+                page: page + 1,
+            })
+        })
+    }
+
     private getCurrentQueryOptions = () => {
-        const { page, searchText } = this.state
+        const { page, searchText, filters } = this.state
 
         return {
             limit: this.limit,
             page,
             searchText,
+            filters,
         }
     }
 }

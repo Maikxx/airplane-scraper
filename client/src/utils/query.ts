@@ -4,6 +4,7 @@ interface QueryOptions {
     limit: number
     page: number
     searchText?: string
+    filters?: QueryFilters
 }
 
 export interface PaginatedQueryResults<NodeType> {
@@ -11,12 +12,21 @@ export interface PaginatedQueryResults<NodeType> {
     nodes?: NodeType[]
 }
 
-export const query = async ({ searchText, page, limit }: QueryOptions): Promise<PaginatedQueryResults<Airplane>> => {
-    const searchTextQueryUrlPart = searchText
+export interface QueryFilters {
+    filterByAirplaneHasImages?: boolean
+}
+
+export const query = async ({ searchText, page, limit, filters }: QueryOptions): Promise<PaginatedQueryResults<Airplane>> => {
+    const urlBase = 'http://localhost:5000/api/airplanes'
+    const searchTextParam = searchText
         ? `&searchText=${searchText}`
         : ''
 
-    const url = `http://localhost:5000/api/airplanes?limit=${limit}&page=${page}${searchTextQueryUrlPart}`
+    const filterParams = filters
+        ? `&filters=${JSON.stringify(filters)}`
+        : ''
+
+    const url = `${urlBase}?limit=${limit}&page=${page}${searchTextParam}${filterParams}`
     const response = await fetch(url)
     return response.json()
 }

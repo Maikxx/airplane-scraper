@@ -5,10 +5,7 @@ import { Filters } from '../../Core/DataEntry/Filters/Filters'
 import { Form } from '../../Core/DataEntry/Form/Form'
 import FormGroup from '@material-ui/core/FormGroup'
 import { ImageFilter } from './FilterTypes/ImageFilter'
-
-interface QueryFilters {
-    filterByAirplaneHasImages?: boolean
-}
+import { QueryFilters } from '../../../utils/query'
 
 interface Props {
     className?: string
@@ -62,11 +59,11 @@ export class AirplaneFilters extends React.Component<Props, State> {
     private onImageFilterChange = (name: string, checked: boolean) => {
         const { onChangeFilter } = this.props
 
-        this.setState({ filterByAirplaneHasImages: checked })
-
-        if (onChangeFilter) {
-            onChangeFilter(this.getFilters())
-        }
+        this.setState({ filterByAirplaneHasImages: checked }, () => {
+            if (onChangeFilter) {
+                onChangeFilter(this.getFilters())
+            }
+        })
     }
 
     private getFilters = () => {
