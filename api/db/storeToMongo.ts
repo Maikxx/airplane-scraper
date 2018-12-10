@@ -10,15 +10,15 @@ const readFile = promisify(fs.readFile)
 export const storeToMongo = async () => {
     try {
         const fileBuffer = await readFile(path.resolve(__dirname, '../../data/planes.json'))
-        const planes = JSON.parse(fileBuffer.toString())
+        const airplanes = JSON.parse(fileBuffer.toString())
 
-        await Promise.all(planes.map(async plane => {
-            const airplane = await new Airplane({
+        await Promise.all(airplanes.map(async airplane => {
+            const mongoAirplane = await new Airplane({
                 _id: new mongoose.Types.ObjectId(),
-                ...plane,
+                ...airplane,
             })
 
-            await airplane.save()
+            await mongoAirplane.save()
         }))
     } catch (error) {
         console.error(error)
