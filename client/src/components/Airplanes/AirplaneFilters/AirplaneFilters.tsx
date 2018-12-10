@@ -7,10 +7,12 @@ import FormGroup from '@material-ui/core/FormGroup'
 import { ImageFilter } from './FilterTypes/ImageFilter'
 import { AirplaneQueryFilters } from '../../../utils/query'
 import { RoleFilter } from './FilterTypes/RoleFilter'
+import { OriginFilter } from './FilterTypes/OriginFilter'
 
 interface Props {
     className?: string
     onChangeFilter?: (filters: AirplaneQueryFilters) => void
+    origins?: string[]
     roles?: string[]
 }
 
@@ -23,7 +25,7 @@ export class AirplaneFilters extends React.Component<Props, State> {
     }
 
     public render() {
-        const { roles } = this.props
+        const { origins, roles } = this.props
 
         return (
             <Filters className={this.getClassName()}>
@@ -37,6 +39,11 @@ export class AirplaneFilters extends React.Component<Props, State> {
                             className={`asa-AirplaneFilters__filter asa-Select`}
                             onChange={this.onSelectFilterChange}
                             roles={roles}
+                        />
+                        <OriginFilter
+                            className={`asa-AirplaneFilters__filter asa-Select`}
+                            onChange={this.onSelectFilterChange}
+                            origins={origins}
                         />
                     </FormGroup>
                 </Form>
@@ -65,11 +72,16 @@ export class AirplaneFilters extends React.Component<Props, State> {
     }
 
     private getFilters = () => {
-        const { filterByAirplaneHasImages, filterByAirplaneRole } = this.state
+        const {
+            filterByAirplaneHasImages,
+            filterByAirplaneRole,
+            filterByAirplaneOrigin,
+        } = this.state
 
         return {
             filterByAirplaneHasImages,
             filterByAirplaneRole,
+            filterByAirplaneOrigin,
         }
     }
 

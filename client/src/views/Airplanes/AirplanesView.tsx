@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
-import { airplaneQuery, AirplaneQueryFilters, rolesQuery } from '../../utils/query'
+import { airplaneQuery, AirplaneQueryFilters, rolesQuery, originsQuery } from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
@@ -15,6 +15,7 @@ interface State {
     filters?: AirplaneQueryFilters
     hasNextPage?: boolean
     loading: boolean
+    origins?: string[]
     page: number
     roles?: string[]
     searchText?: string
@@ -26,6 +27,7 @@ export class AirplanesView extends React.Component<Props> {
         filters: {},
         hasNextPage: undefined,
         loading: true,
+        origins: [],
         page: 0,
         roles: [],
         searchText: '',
@@ -35,7 +37,8 @@ export class AirplanesView extends React.Component<Props> {
 
     public async componentDidMount() {
         const { page } = this.state
-        const roleData = await rolesQuery()
+        const roles = await rolesQuery()
+        const origins = await originsQuery()
         const airplaneData = await airplaneQuery(this.getCurrentQueryOptions())
 
         this.setState({
@@ -43,20 +46,22 @@ export class AirplanesView extends React.Component<Props> {
             hasNextPage: airplaneData.hasNextPage,
             loading: false,
             page: page + 1,
-            roles: roleData,
+            roles,
+            origins,
         })
     }
 
     public render() {
-        const { airplanes, loading, hasNextPage, roles } = this.state
+        const { airplanes, loading, hasNextPage, roles, origins } = this.state
         const canShowContent = !loading && !!airplanes
 
         return (
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
                 <AirplaneFilters
-                    roles={roles}
                     onChangeFilter={this.onFilter}
+                    origins={origins}
+                    roles={roles}
                 />
                 {!canShowContent && (
                     <Loader />
