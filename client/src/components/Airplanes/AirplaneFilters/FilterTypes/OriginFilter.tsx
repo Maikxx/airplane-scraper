@@ -3,7 +3,6 @@ import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
-import { truncateString } from '../../../../utils/string'
 
 interface Props {
     className?: string
@@ -51,7 +50,7 @@ export class OriginFilter extends React.Component<Props, State> {
                     .sort()
                     .map((origin: string, i: number) => (
                         <option key={i} value={origin}>
-                            {truncateString(origin, 25)}
+                            {origin}
                         </option>
                     ))
                 }
