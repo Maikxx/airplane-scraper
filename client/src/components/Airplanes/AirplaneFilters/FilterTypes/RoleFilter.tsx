@@ -48,7 +48,7 @@ export class RoleFilter extends React.Component<Props, State> {
             >
                 <option value={``} disabled={true}/>
                 {roles
-                    .filter(role => role.length > 0)
+                    .sort()
                     .map((role: string, i: number) => (
                         <option key={i} value={role}>
                             {truncateString(role, 25)}

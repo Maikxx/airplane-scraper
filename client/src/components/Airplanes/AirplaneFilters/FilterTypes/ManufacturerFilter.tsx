@@ -48,7 +48,7 @@ export class ManufacturerFilter extends React.Component<Props, State> {
             >
                 <option value={``} disabled={true}/>
                 {manufacturers
-                    .filter(manufacturer => manufacturer.length > 0)
+                    .sort()
                     .map((manufacturer: string, i: number) => (
                         <option key={i} value={manufacturer}>
                             {truncateString(manufacturer, 25)}
