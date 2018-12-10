@@ -48,6 +48,7 @@ export class OriginFilter extends React.Component<Props, State> {
             >
                 <option value={``} disabled={true}/>
                 {origins
+                    .sort()
                     .map((origin: string, i: number) => (
                         <option key={i} value={origin}>
                             {truncateString(origin, 25)}
