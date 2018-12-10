@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { capitalize } from '../utils/string'
+import { capitalize } from '../utils/String.prototype'
 const Airplane = require('../models/airplane')
 
 interface QueryFilters {
