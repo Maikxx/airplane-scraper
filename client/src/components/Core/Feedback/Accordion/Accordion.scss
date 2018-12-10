@@ -1,0 +1,42 @@
+.asa-Accordion {
+    @import '../../../../styles/variables/colors';
+
+    &__header {
+        position: relative;
+        align-items: center;
+
+        &::after {
+            background-color: $color-subtle;
+            bottom: 0;
+            content: '';
+            display: block;
+            height: 2px;
+            left: 24px;
+            position: absolute;
+            right: 24px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    }
+
+    &__icon {
+        margin-top: -1px;
+    }
+
+    &__text {
+        font-weight: 600!important;
+        padding-left: 6px;
+    }
+
+    &__content {
+        padding: 12px 24px!important;
+    }
+
+    &--is-expanded {
+        .asa-Accordion__header {
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+}

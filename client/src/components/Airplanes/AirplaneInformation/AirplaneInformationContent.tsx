@@ -1,27 +1,27 @@
-import './PlaneInformationItem.scss'
+import './AirplaneInformationContent.scss'
 import * as React from 'react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import c from 'classnames'
 
-interface PlaneInformationItemContent {
+interface AirplaneInformationContentInner {
     label: string
     text?: string | string[]
 }
 
 interface Props {
-    content: PlaneInformationItemContent
     className?: string
+    content: AirplaneInformationContentInner
 }
 
-export class PlaneInformationItem extends React.Component<Props> {
+export class AirplaneInformationContent extends React.PureComponent<Props> {
     public render() {
         const { content } = this.props
         const { label, text } = content
         const textShouldBeNewList = Array.isArray(text) && text.length > 1
 
-        if (!text) {
+        if (!text || !text.length || text === '\n') {
             return null
         }
 
@@ -34,12 +34,15 @@ export class PlaneInformationItem extends React.Component<Props> {
                     />
                 )}
                 {textShouldBeNewList && (
-                    <List className={`asa-PlaneInformationItem__nested-list`}>
-                        <ListItem className={`asa-PlaneInformationItem__nested-list-item`}>
+                    <List className={`asa-AirplaneInformationContent__nested-list`}>
+                        <ListItem className={`asa-AirplaneInformationContent__nested-list-item`}>
                             <ListItemText primary={label}/>
                         </ListItem>
                         {Array.isArray(text) && text.map((t, i) => (
-                            <ListItem key={i} className={`asa-PlaneInformationItem__nested-list-item`}>
+                            <ListItem
+                                className={`asa-AirplaneInformationContent__nested-list-item`}
+                                key={i}
+                            >
                                 <ListItemText secondary={t}/>
                             </ListItem>
                         ))}
@@ -52,6 +55,6 @@ export class PlaneInformationItem extends React.Component<Props> {
     private getClassName = () => {
         const { className } = this.props
 
-        return c('asa-PlaneInformationItem', {}, className)
+        return c('asa-AirplaneInformationContent', {}, className)
     }
 }

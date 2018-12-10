@@ -3,7 +3,7 @@ import * as React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import c from 'classnames'
-import { Search } from '../../Core/Search/Search'
+import { Search } from '../../Core/DataEntry/Search/Search'
 
 interface Props {
     className?: string
@@ -15,11 +15,14 @@ export class PageHeader extends React.Component<Props> {
         const { onSearch } = this.props
 
         return (
-            <AppBar position={`sticky`} className={this.getClassName()}>
+            <AppBar
+                className={this.getClassName()}
+                position={`fixed`}
+            >
                 <Typography
+                    className={`asa-PageHeader__title`}
                     component={`h1`}
                     variant={`h4`}
-                    className={`asa-PageHeader__title`}
                 >
                     Wikipedia Airplanes
                 </Typography>
