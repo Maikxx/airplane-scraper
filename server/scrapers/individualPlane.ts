@@ -1,7 +1,8 @@
 import * as request from 'request-promise'
-import { cleanText, capitalizeFirstLetter } from '../transformers'
+import { cleanText } from '../transformers'
 import { getQueryOptions } from '../queries'
 import { dataFile } from '../..'
+import { capitalize } from '../utils/String.prototype'
 
 const scrapeTitle = scraper => {
     const title = scraper('#firstHeading').text()
@@ -30,7 +31,7 @@ const scrapeRole = scraper => {
     const cleanRole = cleanText(role)
 
     return cleanRole
-        ? capitalizeFirstLetter(cleanRole)
+        ? capitalize(cleanRole)
         : role
 }
 
@@ -41,7 +42,7 @@ const scrapeOrigin = scraper => {
     const cleanOrigin = cleanText(origin)
 
     return cleanOrigin
-        ? capitalizeFirstLetter(cleanOrigin)
+        ? capitalize(cleanOrigin)
         : undefined
 }
 
@@ -52,7 +53,7 @@ const scrapeManufacturer = scraper => {
     const cleanManufacturedBy = cleanText(manufacturedBy)
 
     return cleanManufacturedBy
-        ? capitalizeFirstLetter(cleanManufacturedBy)
+        ? capitalize(cleanManufacturedBy)
         : undefined
 }
 
@@ -63,7 +64,7 @@ const scrapeFirstFlightDate = scraper => {
     const cleanFirstFlightDate = cleanText(firstFlightDate)
 
     return cleanFirstFlightDate
-        ? capitalizeFirstLetter(cleanFirstFlightDate)
+        ? capitalize(cleanFirstFlightDate)
         : undefined
 }
 
@@ -86,7 +87,7 @@ const scrapeUsageStatus = scraper => {
     const cleanUsageStatus = cleanText(usageStatus)
 
     return cleanUsageStatus
-        ? capitalizeFirstLetter(cleanUsageStatus)
+        ? capitalize(cleanUsageStatus)
         : undefined
 }
 
@@ -104,7 +105,7 @@ const scrapePrimaryUsers = scraper => {
         const cleanPrimaryUser = primaryUser && cleanText(primaryUser)
 
         return cleanPrimaryUser
-            ? [capitalizeFirstLetter(cleanPrimaryUser)]
+            ? [capitalize(cleanPrimaryUser)]
             : undefined
     }
 
@@ -120,7 +121,7 @@ const scrapeProductionYears = scraper => {
     const cleanProductionYears = cleanText(productionYears)
 
     return cleanProductionYears
-        ? capitalizeFirstLetter(cleanProductionYears)
+        ? capitalize(cleanProductionYears)
         : undefined
 }
 
@@ -131,7 +132,7 @@ const scrapeBuiltNumber = scraper => {
     const cleanAmountBuilt = cleanText(amountBuilt)
 
     return cleanAmountBuilt
-        ? capitalizeFirstLetter(cleanAmountBuilt)
+        ? capitalize(cleanAmountBuilt)
         : undefined
 }
 
