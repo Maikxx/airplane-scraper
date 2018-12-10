@@ -57,7 +57,7 @@ const cleanOrigin = (origin: string): string => {
     return origin
 }
 
-export const migrateAirplaneOrigins = async () => {
+const migrateAirplaneOrigins = async () => {
     const fileBuffer = await readFile(dataFilePath)
     const fileData = await JSON.parse(fileBuffer.toString())
     const docs = await Airplane.find({})
