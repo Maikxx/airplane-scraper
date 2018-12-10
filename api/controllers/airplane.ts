@@ -4,6 +4,7 @@ const Airplane = require('../models/airplane')
 
 interface QueryFilters {
     filterByAirplaneHasImages?: boolean
+    filterByAirplaneManufacturers?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
 }
@@ -14,17 +15,20 @@ const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneHasImages = parsedQueryFilters && parsedQueryFilters.filterByAirplaneHasImages
     const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
     const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
+    const filterByAirplaneManufacturers = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturers
 
     const searchFilter = { title: { $regex: search }}
     const filterByAirplaneHasImagesFilter = { imageSrc: { $exists: true, $ne: undefined }}
     const filterByAirplaneRoleFilter = { role: { $regex: filterByAirplaneRole }}
     const filterByAirplaneOriginFilter = { origin: { $regex: filterByAirplaneOrigin }}
+    const filterByAirplaneManufacturersFilter = { manufacturedBy: { $regex: filterByAirplaneManufacturers }}
 
     return {
         ...(search && searchFilter),
         ...(filterByAirplaneHasImages && filterByAirplaneHasImagesFilter),
         ...(filterByAirplaneRole && filterByAirplaneRoleFilter),
         ...(filterByAirplaneOrigin && filterByAirplaneOriginFilter),
+        ...(filterByAirplaneManufacturers && filterByAirplaneManufacturersFilter),
     }
 }
 
