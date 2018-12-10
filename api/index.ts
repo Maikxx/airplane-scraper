@@ -1,4 +1,4 @@
-import { connectToMongoAtlas } from './db/conntect'
+import { connectToMongoAtlas } from './db/connect'
 
 if (process.env.NODE !== 'production') {
     require('dotenv').load()
