@@ -7,6 +7,6 @@ const router = express.Router()
 router.get('/manufacturers', FilterController.getManufacturers)
 router.get('/origins', FilterController.getOrigins)
 router.get('/roles', FilterController.getRoles)
-router.get('/', AirplaneController.get)
+router.get('/', AirplaneController.getAirplanes)
 
 export default router

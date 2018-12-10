@@ -4,35 +4,50 @@ const Airplane = require('../models/airplane')
 
 interface QueryFilters {
     filterByAirplaneHasImages?: boolean
+    filterByAirplaneManufacturer?: string
     filterByAirplaneManufacturers?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
 }
 
-const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
+const getSearchFilter = (query: any) => {
     const { searchText } = query
     const search = searchText && capitalize(searchText)
+
+    return { ...(search && { title: { $regex: search }}) }
+}
+
+const getAirplaneImageFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneHasImages = parsedQueryFilters && parsedQueryFilters.filterByAirplaneHasImages
+    return { ...(filterByAirplaneHasImages && { imageSrc: { $exists: true, $ne: undefined }}) }
+}
+
+const getRoleFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
+    return { ...(filterByAirplaneRole && { role: { $regex: filterByAirplaneRole }}) }
+}
+
+const getOriginFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
-    const filterByAirplaneManufacturers = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturers
+    return { ...(filterByAirplaneOrigin && { origin: { $regex: filterByAirplaneOrigin }}) }
+}
 
-    const searchFilter = { title: { $regex: search }}
-    const filterByAirplaneHasImagesFilter = { imageSrc: { $exists: true, $ne: undefined }}
-    const filterByAirplaneRoleFilter = { role: { $regex: filterByAirplaneRole }}
-    const filterByAirplaneOriginFilter = { origin: { $regex: filterByAirplaneOrigin }}
-    const filterByAirplaneManufacturersFilter = { manufacturedBy: { $regex: filterByAirplaneManufacturers }}
+const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneManufacturer = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturer
+    return { ...(filterByAirplaneManufacturer && { manufacturedBy: { $regex: filterByAirplaneManufacturer }}) }
+}
 
+const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
     return {
-        ...(search && searchFilter),
-        ...(filterByAirplaneHasImages && filterByAirplaneHasImagesFilter),
-        ...(filterByAirplaneRole && filterByAirplaneRoleFilter),
-        ...(filterByAirplaneOrigin && filterByAirplaneOriginFilter),
-        ...(filterByAirplaneManufacturers && filterByAirplaneManufacturersFilter),
+        ...(getSearchFilter(query)),
+        ...(getAirplaneImageFilter(parsedQueryFilters)),
+        ...(getRoleFilter(parsedQueryFilters)),
+        ...(getOriginFilter(parsedQueryFilters)),
+        ...(getManufacturerFilter(parsedQueryFilters)),
     }
 }
 
-export const get = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const getAirplanes = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { query } = req
     const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
 
