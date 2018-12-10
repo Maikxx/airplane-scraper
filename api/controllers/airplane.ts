@@ -4,6 +4,7 @@ const Airplane = require('../models/airplane')
 
 interface QueryFilters {
     filterByAirplaneHasImages?: boolean
+    filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
 }
 
@@ -12,15 +13,18 @@ const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
     const search = searchText && capitalize(searchText)
     const filterByAirplaneHasImages = parsedQueryFilters && parsedQueryFilters.filterByAirplaneHasImages
     const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
+    const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
 
     const searchFilter = { title: { $regex: search }}
     const filterByAirplaneHasImagesFilter = { imageSrc: { $exists: true, $ne: undefined }}
     const filterByAirplaneRoleFilter = { role: { $regex: filterByAirplaneRole }}
+    const filterByAirplaneOriginFilter = { origin: { $regex: filterByAirplaneOrigin }}
 
     return {
         ...(search && searchFilter),
         ...(filterByAirplaneHasImages && filterByAirplaneHasImagesFilter),
         ...(filterByAirplaneRole && filterByAirplaneRoleFilter),
+        ...(filterByAirplaneOrigin && filterByAirplaneOriginFilter),
     }
 }
 
