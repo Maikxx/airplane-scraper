@@ -1,6 +1,12 @@
 import * as React from 'react'
 import { Airplane } from '../../types/Airplane'
-import { airplaneQuery, AirplaneQueryFilters, rolesQuery, originsQuery } from '../../utils/query'
+import {
+    airplaneQuery,
+    AirplaneQueryFilters,
+    rolesQuery,
+    originsQuery,
+    manufacturersQuery,
+} from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
 import { PageHeader } from '../../components/Layout/PageHeader/PageHeader'
@@ -15,6 +21,7 @@ interface State {
     filters?: AirplaneQueryFilters
     hasNextPage?: boolean
     loading: boolean
+    manufacturers?: string[]
     origins?: string[]
     page: number
     roles?: string[]
@@ -27,6 +34,7 @@ export class AirplanesView extends React.Component<Props> {
         filters: {},
         hasNextPage: undefined,
         loading: true,
+        manufacturers: [],
         origins: [],
         page: 0,
         roles: [],
@@ -39,26 +47,37 @@ export class AirplanesView extends React.Component<Props> {
         const { page } = this.state
         const roles = await rolesQuery()
         const origins = await originsQuery()
+        const manufacturers = await manufacturersQuery()
         const airplaneData = await airplaneQuery(this.getCurrentQueryOptions())
 
         this.setState({
             airplanes: airplaneData.nodes,
             hasNextPage: airplaneData.hasNextPage,
             loading: false,
+            manufacturers,
+            origins,
             page: page + 1,
             roles,
-            origins,
         })
     }
 
     public render() {
-        const { airplanes, loading, hasNextPage, roles, origins } = this.state
+        const {
+            airplanes,
+            hasNextPage,
+            loading,
+            manufacturers,
+            roles,
+            origins,
+        } = this.state
+
         const canShowContent = !loading && !!airplanes
 
         return (
             <Page hasPageHeader={true}>
                 <PageHeader onSearch={this.onSearch}/>
                 <AirplaneFilters
+                    manufacturers={manufacturers}
                     onChangeFilter={this.onFilter}
                     origins={origins}
                     roles={roles}

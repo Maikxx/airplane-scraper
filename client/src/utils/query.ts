@@ -14,6 +14,7 @@ export interface PaginatedQueryResults<NodeType> {
 
 export interface AirplaneQueryFilters {
     filterByAirplaneHasImages?: boolean
+    filterByAirplaneManufacturer?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
 }
@@ -41,6 +42,12 @@ export const rolesQuery = async (): Promise<string[]> => {
 
 export const originsQuery = async (): Promise<string[]> => {
     const url = `http://localhost:5000/api/airplanes/origins`
+    const response = await fetch(url)
+    return response.json()
+}
+
+export const manufacturersQuery = async (): Promise<string[]> => {
+    const url = `http://localhost:5000/api/airplanes/manufacturers`
     const response = await fetch(url)
     return response.json()
 }
