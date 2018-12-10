@@ -13,8 +13,6 @@ const scrapeImageSrc = scraper => {
     const src = scraper('.infobox img:first-child')
         .attr('src')
 
-    console.log(src)
-
     return src
         ? src.replace('//upload', 'https://upload')
         : undefined
