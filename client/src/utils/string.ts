@@ -1,5 +1,6 @@
 export const truncateString = (text: string, maxLength: number): string => {
-    return text.length >= maxLength
-        ? `${text.substr(0, maxLength)}...`
+    const dots = '...'
+    return (text.length + dots.length) >= maxLength
+        ? `${text.substr(0, maxLength)}${dots}`
         : text
 }
