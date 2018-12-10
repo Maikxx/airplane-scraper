@@ -5,7 +5,6 @@ const Airplane = require('../models/airplane')
 interface QueryFilters {
     filterByAirplaneHasImages?: boolean
     filterByAirplaneManufacturer?: string
-    filterByAirplaneManufacturers?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
 }
