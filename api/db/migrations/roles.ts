@@ -10,76 +10,41 @@ const Airplane = require('../../models/airplane')
 const dataFilePath = path.resolve(__dirname, '../../../data/planes.json')
 
 export const cleanRole = (role: string): string => {
-    if (role.toLowerCase().includes('aerobatic')) {
-        return 'Aerobatics'
+    const translationKeys = {
+        aerobatic: 'Aerobatics',
+        agricultural: 'Agricultural',
+        airliner: 'Airliner',
+        amateur: 'Homebuilt',
+        amphibian: 'Amphibian',
+        amphibious: 'Amphibian',
+        biplane: 'Biplane',
+        bomber: 'Bomber',
+        business: 'Business',
+        cargo: 'Transport',
+        civil: 'Airliner',
+        commercial: 'Airliner',
+        experimental: 'Experimental',
+        'flying boat': 'Flying boat',
+        helicopter: 'Helicopter',
+        homebuilt: 'Homebuilt',
+        personal: 'Personal',
+        racer: 'Sport',
+        racing: 'Sport',
+        sailplane: 'Sailplane',
+        sport: 'Sport',
+        tour: 'Touring',
+        trainer: 'Trainer',
+        training: 'Trainer',
+        transport: 'Transport',
+        utility: 'Utility',
     }
 
-    if (role.toLowerCase().includes('agricultural')) {
-        return 'Agricultural'
-    }
+    const filteredTranslationKeys = Object
+        .keys(translationKeys)
+        .filter(key => role.toLowerCase().includes(key))
 
-    if (role.includes('Amphibian') || role.includes('Amphibious')) {
-        return 'Amphibian'
-    }
-
-    if (role.toLowerCase().includes('bomber')) {
-        return 'Bomber'
-    }
-
-    if (role.toLowerCase().includes('biplane')) {
-        return 'Biplane'
-    }
-
-    if (role.toLowerCase().includes('utility')) {
-        return 'Utility'
-    }
-
-    if (role.toLowerCase().includes('transport') || role.toLowerCase().includes('cargo')) {
-        return 'Transport'
-    }
-
-    if (role.toLowerCase().includes('sport') || role.toLowerCase().includes('racing') || role.toLowerCase().includes('racer')) {
-        return 'Sport'
-    }
-
-    if (role.toLowerCase().includes('trainer') || role.toLowerCase().includes('training')) {
-        return 'Trainer'
-    }
-
-    if (role.toLowerCase().includes('personal')) {
-        return 'Personal'
-    }
-
-    if (role.toLowerCase().includes('homebuilt') || role.toLowerCase().includes('amateur')) {
-        return 'Homebuilt'
-    }
-
-    if (role.toLowerCase().includes('airliner') || role.toLowerCase().includes('commercial') || role.toLowerCase().includes('civil')) {
-        return 'Airliner'
-    }
-
-    if (role.toLowerCase().includes('business')) {
-        return 'Business'
-    }
-
-    if (role.toLowerCase().includes('tour')) {
-        return 'Touring'
-    }
-
-    if (role.toLowerCase().includes('flying boat')) {
-        return 'Flying boat'
-    }
-
-    if (role.toLowerCase().includes('sailplane')) {
-        return 'Sailplane'
-    }
-
-    if (role.toLowerCase().includes('experimental')) {
-        return 'Experimental'
-    }
-
-    if (role.toLowerCase().includes('helicopter')) {
-        return 'Helicopter'
+    if (filteredTranslationKeys && filteredTranslationKeys.length > 0) {
+        return translationKeys[filteredTranslationKeys[0]]
     }
 
     return 'Other'
