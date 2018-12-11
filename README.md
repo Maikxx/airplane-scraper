@@ -14,6 +14,8 @@ Due to the large amount of requests, it is smart not to run `yarn start-server` 
 * Make sure to run the [storeToMongo](./api/db/storeToMongo.ts) function before starting the api
 * Start the development server: `yarn start-api`
 
+You shouldn't have to run migrations, but if, for some reason you do, just uncomment both the [runMigrations function](./api/index.ts#L24) and the [import statement](./api/index.ts#L13) in the [api](./api/index.ts)
+
 ## License
 
 This repository is licensed as [MIT](LICENSE) by [Maikel van Veen](https://github.com/maikxx).
