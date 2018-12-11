@@ -10,7 +10,7 @@
     "clearDist": "rm -rf dist/",
     "lint": "tslint",
     "moveHtmlFile": "mv dist/index.html ./index.html",
-    "serve": "yarn clearDist && parcel client/index.html"
+    "start:client": "yarn clearDist && parcel client/index.html"
   },
   "devDependencies": {
     "@types/query-string": "^6.1.1",
