@@ -11,6 +11,7 @@ const dataFilePath = path.resolve(__dirname, '../../../data/planes.json')
 
 export const cleanRole = (role: string): string => {
     const translationKeys = {
+        'flying boat': 'Flying boat',
         aerobatic: 'Aerobatics',
         agricultural: 'Agricultural',
         airliner: 'Airliner',
@@ -24,7 +25,6 @@ export const cleanRole = (role: string): string => {
         civil: 'Airliner',
         commercial: 'Airliner',
         experimental: 'Experimental',
-        'flying boat': 'Flying boat',
         helicopter: 'Helicopter',
         homebuilt: 'Homebuilt',
         personal: 'Personal',

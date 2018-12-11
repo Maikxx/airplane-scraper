@@ -15,23 +15,23 @@ export const cleanOrigin = (origin: string): string => {
     }
 
     const translationKeys = {
-        'Soviet Union': 'Soviet Union',
-        USSR: 'Soviet Union',
-        'People\'s Republic': 'China',
-        Argentine: 'Argentina',
-        Czechoslovakia: 'Czech Republic',
-        '/': 'Multi-national',
-        and: 'Multi-national',
         ',': 'Multi-national',
         '(': 'Multi-national',
-        'United Kingdom': 'United Kingdom',
-        Britain: 'United Kingdom',
+        '/': 'Multi-national',
+        'People\'s Republic': 'China',
         'Russian Federation': 'Russia',
-        USA: 'United States of America',
-        US: 'United States of America',
+        'Soviet Union': 'Soviet Union',
+        'Ten-seat': undefined,
+        'United Kingdom': 'United Kingdom',
         'United States': 'United States of America',
         America: 'United States of America',
-        'Ten-seat': undefined,
+        and: 'Multi-national',
+        Argentine: 'Argentina',
+        Britain: 'United Kingdom',
+        Czechoslovakia: 'Czech Republic',
+        US: 'United States of America',
+        USA: 'United States of America',
+        USSR: 'Soviet Union',
     }
 
     const filteredTranslationKeys = Object
