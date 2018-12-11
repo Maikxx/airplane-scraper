@@ -42,6 +42,7 @@ export const cleanManufacturer = (manufacturer: string): string => {
         'bac later bae and bae systems': 'BAC',
         'british aircraft': 'British Aircraft Company',
         'britten norman': 'Britten-Norman',
+        'ntreprinderea de construcii aeronautice romneti icar': 'ICAR',
         'lior et olivier': 'Lior et Olivier',
         'north american': 'North American Aviation',
         'siat mbb ca': 'SIAT MBB CASA',
@@ -147,7 +148,7 @@ export const cleanManufacturer = (manufacturer: string): string => {
         .filter(text => lowerCaseName.includes(text))
         .map(() => getTextTillOccuranceOfToken(manufacturer, ' ' , 1))[0]
 
-    if (!transformedShortManufacturers || transformedShortManufacturers !== manufacturer) {
+    if (transformedShortManufacturers && transformedShortManufacturers !== manufacturer) {
         return transformedShortManufacturers
     }
 
@@ -178,7 +179,7 @@ export const cleanManufacturer = (manufacturer: string): string => {
         .filter(text => lowerCaseName.includes(text))
         .map(() => getTextTillOccuranceOfToken(manufacturer, ' ' , 2))[0]
 
-    if (!transformedLongManufacturers || transformedLongManufacturers !== manufacturer) {
+    if (transformedLongManufacturers && transformedLongManufacturers !== manufacturer) {
         return transformedLongManufacturers
     }
 
@@ -220,17 +221,17 @@ export const migrateAirplaneManufacturers = async () => {
         /**
          * Store to Mongo
          */
-        // if (!manufacturedBy || !manufacturedBy.length) {
-        //     return null
-        // }
+        if (!manufacturedBy || !manufacturedBy.length) {
+            return null
+        }
 
-        // const cleanedManufacturer = cleanManufacturer(manufacturedBy)
+        const cleanedManufacturer = cleanManufacturer(manufacturedBy)
 
-        // if (manufacturedBy === cleanedManufacturer) {
-        //     return null
-        // }
+        if (manufacturedBy === cleanedManufacturer) {
+            return null
+        }
 
-        // await Airplane.updateOne({ _id }, { $set: { manufacturedBy: cleanedManufacturer }})
+        await Airplane.updateOne({ _id }, { $set: { manufacturedBy: cleanedManufacturer }})
 
         /**
          * Store to file
