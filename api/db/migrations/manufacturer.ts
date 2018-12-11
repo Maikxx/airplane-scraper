@@ -9,261 +9,177 @@ const writeFile = promisify(fs.writeFile)
 const Airplane = require('../../models/airplane')
 const dataFilePath = path.resolve(__dirname, '../../../data/planes.json')
 
+const getTextTillOccuranceOfToken = (text: string, token: string, index: number): string => {
+    const firstIndex = text.indexOf(token)
+
+    if (firstIndex === -1) {
+        return text
+    }
+
+    if (index > 1) {
+        const indexToRemove = text.indexOf(token, firstIndex + index - 1)
+
+        if (indexToRemove === -1) {
+            return text
+        }
+
+        return text
+            .slice(0, indexToRemove)
+            .trim()
+    }
+
+    return text.slice(0, firstIndex)
+}
+
 export const cleanManufacturer = (manufacturer: string): string => {
     const lowerCaseName = manufacturer.toLowerCase()
 
-    if (lowerCaseName.includes('aero spacelines')) {
-        return 'Aero Spacelines'
+    const translationKeys = {
+        agusta: 'Agusta Westland',
+        ['advance aircraft']: 'Advance Aircraft Company',
+        ['siat mbb ca']: 'SIAT MBB CASA',
+        aeronca: 'Aeronca Aircraft',
+        ['alexander schleicher']: 'Alexander Schleicher GmbH & Co',
+        ['armstrong whitworth']: 'Armstrong Whitworth Aircraft',
+        arado: 'Arado Flugzeugwerke',
+        ['arrow aircraft and motor']: 'Arrow Aircraft and Motors',
+        bellanca: 'AviaBellanca Aircraft',
+        ['bac later bae and bae systems']: 'BAC',
+        blackburn: 'Blackburn Aircraft',
+        ['british aircraft']: 'British Aircraft Company',
+        ['britten norman']: 'Britten-Norman',
+        general: 'General Aircraft',
+        ['lior et olivier']: 'Lior et Olivier',
+        nvkoolhoven: 'Koolhoven',
+        pzl: 'PZL',
+        ['north american']: 'North American Aviation',
+        phillips: 'Phillips and Powis Aircraft',
+        picairn: 'Pitcairn',
+        ['united aircraft']: 'United Aircraft Corporation',
+        ['xian aircraft industrial corporation']: 'Xian Aircraft Industrial Corporation',
     }
 
-    if (lowerCaseName.includes('agusta')) {
-        return 'Agusta Westland'
-    }
+    const filteredTranslationKeys = Object
+        .keys(translationKeys)
+        .filter(key => lowerCaseName.includes(key))
 
-    if (lowerCaseName.includes('advance aircraft')) {
-        return 'Advance Aircraft Company'
-    }
-
-    if (lowerCaseName.includes('aero vodochody')) {
-        return 'Aero Vodochody'
-    }
-
-    if (lowerCaseName.includes('siat mbb ca')) {
-        return 'SIAT MBB CASA'
-    }
-
-    if (lowerCaseName.includes('aeronca')) {
-        return 'Aeronca Aircraft'
-    }
-
-    if (lowerCaseName.includes('alexander schleicher')) {
-        return 'Alexander Schleicher GmbH & Co'
-    }
-
-    if (lowerCaseName.includes('armstrong whitworth')) {
-        return 'Armstrong Whitworth Aircraft'
-    }
-
-    if (lowerCaseName.includes('arado')) {
-        return 'Arado Flugzeugwerke'
-    }
-
-    if (lowerCaseName.includes('arrow aircraft and motor')) {
-        return 'Arrow Aircraft and Motors'
-    }
-
-    if (lowerCaseName.includes('avions mudry')) {
-        return 'Avions Mudry'
-    }
-
-    if (lowerCaseName.includes('bellanca')) {
-        return 'AviaBellanca Aircraft'
-    }
-
-    if (lowerCaseName.includes('bac later bae and bae systems')) {
-        return 'BAC'
-    }
-
-    if (lowerCaseName.includes('bede aviation')) {
-        return 'Bede Aviation'
-    }
-
-    if (lowerCaseName.includes('blackburn')) {
-        return 'Blackburn Aircraft'
-    }
-
-    if (lowerCaseName.includes('british aircraft')) {
-        return 'British Aircraft Company'
-    }
-
-    if (lowerCaseName.includes('britten norman')) {
-        return 'Britten-Norman'
-    }
-
-    if (lowerCaseName.includes('consolidated aircraft')) {
-        return 'Consolidated Aircraft'
-    }
-
-    if (lowerCaseName.includes('constructions aronautiques')) {
-        return 'Constructions Aronautiques'
-    }
-
-    if (lowerCaseName.includes('construcciones aeronuticas')) {
-        return 'Construcciones Aeronuticas'
-    }
-
-    if (lowerCaseName.includes('de havilland')) {
-        return 'De Havilland'
-    }
-
-    if (lowerCaseName.includes('diamond aircraft')) {
-        return 'Diamond Aircraft'
-    }
-
-    if (lowerCaseName.includes('fleet aircraft')) {
-        return 'Fleet Aircraft'
-    }
-
-    if (lowerCaseName.includes('general')) {
-        return 'General Aircraft'
-    }
-
-    if (lowerCaseName.includes('george parnall')) {
-        return 'George Parnall'
-    }
-
-    if (lowerCaseName.includes('granville brothers')) {
-        return 'Granville Brothers'
-    }
-
-    if (lowerCaseName.includes('handley page')) {
-        return 'Handley Page'
-    }
-
-    if (lowerCaseName.includes('kellett autogiro')) {
-        return 'Kellett Autogiro'
-    }
-
-    if (lowerCaseName.includes('lior et olivier')) {
-        return 'Lior et Olivier'
-    }
-
-    if (lowerCaseName.includes('luscombe aircraft')) {
-        return 'Luscombe Aircraft'
-    }
-
-    if (lowerCaseName.includes('nvkoolhoven')) {
-        return 'Koolhoven'
-    }
-
-    if (lowerCaseName.includes('pzl')) {
-        return 'PZL'
-    }
-
-    if (lowerCaseName.includes('pacific aerospace')) {
-        return 'Pacific Aerospace'
-    }
-
-    if (lowerCaseName.includes('north american')) {
-        return 'North American Aviation'
-    }
-
-    if (lowerCaseName.includes('phillips')) {
-        return 'Phillips and Powis Aircraft'
-    }
-
-    if (lowerCaseName.includes('picairn')) {
-        return 'Pitcairn'
-    }
-
-    if (lowerCaseName.includes('short brothers')) {
-        return 'Short Brothers'
-    }
-
-    if (lowerCaseName.includes('sopwith aviation')) {
-        return 'Sopwith Aviation'
-    }
-
-    if (lowerCaseName.includes('spartan aircraft')) {
-        return 'Spartan Aircraft'
-    }
-
-    if (lowerCaseName.includes('stinson aircraft')) {
-        return 'Stinson Aircraft'
-    }
-
-    if (lowerCaseName.includes('united aircraft')) {
-        return 'United Aircraft Corporation'
-    }
-
-    if (lowerCaseName.includes('xian aircraft industrial corporation')) {
-        return 'Xian Aircraft Industrial Corporation'
+    if (filteredTranslationKeys.length > 0) {
+        return translationKeys[filteredTranslationKeys[0]]
     }
 
     if (manufacturer.includes('later')) {
-        return manufacturer
-            .slice(0, manufacturer.indexOf('later'))
-            .trim()
+        return getTextTillOccuranceOfToken(manufacturer, 'later', 1)
     }
 
     if (manufacturer.includes('  ')) {
-        return manufacturer
-            .slice(0, manufacturer.indexOf('  '))
-            .trim()
+        return getTextTillOccuranceOfToken(manufacturer, '  ', 1)
     }
 
-    if (
-        lowerCaseName.includes('aeg')
-        || lowerCaseName.includes('auster')
-        || lowerCaseName.includes('aviastar')
-        || lowerCaseName.includes('antonov')
-        || lowerCaseName.includes('avro')
-        || lowerCaseName.includes('beriev')
-        || lowerCaseName.includes('boisavia')
-        || lowerCaseName.includes('boeing')
-        || lowerCaseName.includes('bombardier')
-        || lowerCaseName.includes('breguet')
-        || lowerCaseName.includes('bristol')
-        || lowerCaseName.includes('brochet')
-        || lowerCaseName.includes('buhl')
-        || lowerCaseName.includes('cantieri')
-        || lowerCaseName.includes('caudron')
-        || lowerCaseName.includes('cessna')
-        || lowerCaseName.includes('cirrus')
-        || lowerCaseName.includes('curtiss')
-        || lowerCaseName.includes('dwl')
-        || lowerCaseName.includes('dornier')
-        || lowerCaseName.includes('eclipse')
-        || lowerCaseName.includes('extra')
-        || lowerCaseName.includes('fairchild')
-        || lowerCaseName.includes('farman')
-        || lowerCaseName.includes('found')
-        || lowerCaseName.includes('fournier')
-        || lowerCaseName.includes('grumann')
-        || lowerCaseName.includes('gulfstream')
-        || lowerCaseName.includes('harbin')
-        || lowerCaseName.includes('hawker')
-        || lowerCaseName.includes('heinkel')
-        || lowerCaseName.includes('howard')
-        || lowerCaseName.includes('junkers')
-        || lowerCaseName.includes('keystone')
-        || lowerCaseName.includes('klemm')
-        || lowerCaseName.includes('latcore')
-        || lowerCaseName.includes('letov')
-        || lowerCaseName.includes('lockheed')
-        || lowerCaseName.includes('leoning')
-        || lowerCaseName.includes('meyers')
-        || lowerCaseName.includes('mil helicopters')
-        || lowerCaseName.includes('mil moscow')
-        || lowerCaseName.includes('monocoupe')
-        || lowerCaseName.includes('mooney')
-        || lowerCaseName.includes('northrop')
-        || lowerCaseName.includes('pzl')
-        || lowerCaseName.includes('parnall')
-        || lowerCaseName.includes('percival')
-        || lowerCaseName.includes('piper')
-        || lowerCaseName.includes('pitcairn')
-        || lowerCaseName.includes('rans')
-        || lowerCaseName.includes('rearwin')
-        || lowerCaseName.includes('robinson')
-        || lowerCaseName.includes('rohrbach')
-        || lowerCaseName.includes('ryan')
-        || lowerCaseName.includes('saunders')
-        || lowerCaseName.includes('scheibe')
-        || lowerCaseName.includes('schneider')
-        || lowerCaseName.includes('sud')
-        || lowerCaseName.includes('supermarine')
-        || lowerCaseName.includes('tashkent')
-        || lowerCaseName.includes('travel')
-        || lowerCaseName.includes('tupolev')
-        || lowerCaseName.includes('wassmer')
-        || lowerCaseName.includes('weatherly')
-    ) {
-        const hasSpace = manufacturer.indexOf(' ') > -1
+    const removeAfterFirstSpace = [
+        'aeg',
+        'auster',
+        'aviastar',
+        'antonov',
+        'avro',
+        'beriev',
+        'boisavia',
+        'boeing',
+        'bombardier',
+        'breguet',
+        'bristol',
+        'brochet',
+        'buhl',
+        'cantieri',
+        'caudron',
+        'cessna',
+        'cirrus',
+        'curtiss',
+        'dwl',
+        'dornier',
+        'eclipse',
+        'extra',
+        'fairchild',
+        'farman',
+        'found',
+        'fournier',
+        'grumann',
+        'gulfstream',
+        'harbin',
+        'hawker',
+        'heinkel',
+        'howard',
+        'junkers',
+        'keystone',
+        'klemm',
+        'latcore',
+        'letov',
+        'lockheed',
+        'leoning',
+        'meyers',
+        'mil helicopters',
+        'mil moscow',
+        'monocoupe',
+        'mooney',
+        'northrop',
+        'pzl',
+        'parnall',
+        'percival',
+        'piper',
+        'pitcairn',
+        'rans',
+        'rearwin',
+        'robinson',
+        'rohrbach',
+        'ryan',
+        'saunders',
+        'scheibe',
+        'schneider',
+        'sud',
+        'supermarine',
+        'tashkent',
+        'travel',
+        'tupolev',
+        'wassmer',
+        'weatherly',
+    ]
 
-        if (hasSpace) {
-            return manufacturer.slice(0, manufacturer.indexOf(' '))
-        }
+    const transformedShortManufacturers = removeAfterFirstSpace
+        .filter(text => lowerCaseName.includes(text))
+        .map(() => getTextTillOccuranceOfToken(manufacturer, ' ' , 1))[0]
+
+    if (!transformedShortManufacturers || transformedShortManufacturers !== manufacturer) {
+        return transformedShortManufacturers
+    }
+
+    const removeAfterSecondSpace = [
+        'aero spacelines',
+        'aero vodochody',
+        'avions mudry',
+        'bede aviation',
+        'consolidated aircraft',
+        'constructions aronautiques',
+        'construcciones aeronuticas',
+        'de havilland',
+        'diamond aircraft',
+        'fleet aircraft',
+        'george parnall',
+        'granville brothers',
+        'handley page',
+        'kellett autogiro',
+        'luscombe aircraft',
+        'pacific aerospace',
+        'short brothers',
+        'sopwith aviation',
+        'spartan aircraft',
+        'stinson aircraft',
+    ]
+
+    const transformedLongManufacturers = removeAfterSecondSpace
+        .filter(text => lowerCaseName.includes(text))
+        .map(() => getTextTillOccuranceOfToken(manufacturer, ' ' , 2))[0]
+
+    if (!transformedLongManufacturers || transformedLongManufacturers !== manufacturer) {
+        return transformedLongManufacturers
     }
 
     const removeExcessTokens = (company: string): string => {
