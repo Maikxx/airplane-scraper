@@ -10,7 +10,9 @@ Due to the large amount of requests, it is smart not to run `yarn start-server` 
 * Clone the repository: `git clone git@github.com:Maikxx/airplane-scraper.git`
 * Navigate into the directory: `cd airplane-scraper`
 * Install dependencies: `yarn` or `npm install`
-* Start linting and the development servers: `yarn lint`, `yarn start-server` and `yarn start-api`
+* Run: `cp .env.example .env` and then fill out the required variables
+* Make sure to run the [storeToMongo](./api/db/storeToMongo.ts) function before starting the api
+* Start the development server: `yarn start-api`
 
 ## License
 
