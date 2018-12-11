@@ -295,8 +295,8 @@ export const cleanManufacturer = (manufacturer: string): string => {
 }
 
 export const migrateAirplaneManufacturers = async () => {
-    // const fileBuffer = await readFile(dataFilePath)
-    // const fileData = await JSON.parse(fileBuffer.toString())
+    const fileBuffer = await readFile(dataFilePath)
+    const fileData = await JSON.parse(fileBuffer.toString())
     const docs = await Airplane.find({})
     const newFileData = await Promise.all(docs.map(async (doc: MongoAirplane) => {
         const { _id, manufacturedBy, title } = doc._doc
@@ -304,29 +304,29 @@ export const migrateAirplaneManufacturers = async () => {
         /**
          * Store to Mongo
          */
-        if (!manufacturedBy || !manufacturedBy.length) {
-            return null
-        }
+        // if (!manufacturedBy || !manufacturedBy.length) {
+        //     return null
+        // }
 
-        const cleanedManufacturer = cleanManufacturer(manufacturedBy)
+        // const cleanedManufacturer = cleanManufacturer(manufacturedBy)
 
-        if (manufacturedBy === cleanedManufacturer) {
-            return null
-        }
+        // if (manufacturedBy === cleanedManufacturer) {
+        //     return null
+        // }
 
-        await Airplane.updateOne({ _id }, { $set: { manufacturedBy: cleanedManufacturer }})
+        // await Airplane.updateOne({ _id }, { $set: { manufacturedBy: cleanedManufacturer }})
 
         /**
          * Store to file
          */
-        // const currentPlane = await fileData.filter(ap => ap.title === title)[0]
+        const currentPlane = await fileData.filter(ap => ap.title === title)[0]
 
-        // if (currentPlane) {
-        //     currentPlane.manufacturedBy = manufacturedBy
-        // }
+        if (currentPlane) {
+            currentPlane.manufacturedBy = manufacturedBy
+        }
 
-        // return currentPlane
+        return currentPlane
     }))
 
-    // await writeFile(dataFilePath, JSON.stringify(newFileData))
+    await writeFile(dataFilePath, JSON.stringify(newFileData))
 }
