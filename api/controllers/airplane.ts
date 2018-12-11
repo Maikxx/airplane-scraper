@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { capitalize } from '../utils/String.prototype'
 const Airplane = require('../models/airplane')
 
 interface QueryFilters {
@@ -11,9 +10,8 @@ interface QueryFilters {
 
 const getSearchFilter = (query: any) => {
     const { searchText } = query
-    const search = searchText && capitalize(searchText)
 
-    return { ...(search && { title: { $regex: search }}) }
+    return { ...(searchText && { title: { $regex: new RegExp(searchText, 'i') }}) }
 }
 
 const getAirplaneImageFilter = (parsedQueryFilters?: QueryFilters) => {
@@ -23,17 +21,17 @@ const getAirplaneImageFilter = (parsedQueryFilters?: QueryFilters) => {
 
 const getRoleFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
-    return { ...(filterByAirplaneRole && { role: { $regex: filterByAirplaneRole }}) }
+    return { ...(filterByAirplaneRole && { role: { $regex: new RegExp(filterByAirplaneRole, 'i') }}) }
 }
 
 const getOriginFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
-    return { ...(filterByAirplaneOrigin && { origin: { $regex: filterByAirplaneOrigin }}) }
+    return { ...(filterByAirplaneOrigin && { origin: { $regex: new RegExp(filterByAirplaneOrigin, 'i') }}) }
 }
 
 const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneManufacturer = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturer
-    return { ...(filterByAirplaneManufacturer && { manufacturedBy: { $regex: filterByAirplaneManufacturer }}) }
+    return { ...(filterByAirplaneManufacturer && { manufacturedBy: { $regex: new RegExp(filterByAirplaneManufacturer, 'i') }}) }
 }
 
 const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
