@@ -14,44 +14,36 @@ export const cleanOrigin = (origin: string): string => {
         return 'North America'
     }
 
-    if (origin.includes('Soviet Union') || origin.includes('USSR')) {
-        return 'Soviet Union'
+    const translationKeys = {
+        'Soviet Union': 'Soviet Union',
+        USSR: 'Soviet Union',
+        'People\'s Republic': 'China',
+        Argentine: 'Argentina',
+        Czechoslovakia: 'Czech Republic',
+        '/': 'Multi-national',
+        and: 'Multi-national',
+        ',': 'Multi-national',
+        '(': 'Multi-national',
+        'United Kingdom': 'United Kingdom',
+        Britain: 'United Kingdom',
+        'Russian Federation': 'Russia',
+        USA: 'United States of America',
+        US: 'United States of America',
+        'United States': 'United States of America',
+        America: 'United States of America',
+        'Ten-seat': undefined,
     }
 
-    if (origin.includes('People\'s Republic')) {
-        return 'China'
-    }
+    const filteredTranslationKeys = Object
+        .keys(translationKeys)
+        .filter(key => origin.includes(key))
 
-    if (origin === 'Argentine') {
-        return 'Argentina'
-    }
-
-    if (origin.includes('Czechoslovakia')) {
-        return 'Czech Republic'
-    }
-
-    if (origin.includes('/') || origin.includes('and') || origin.includes(',') || origin.includes('(') || origin.includes('&')) {
-        return 'Multi-national'
-    }
-
-    if (origin.includes('United Kingdom') || origin.includes('Britain')) {
-        return 'United Kingdom'
-    }
-
-    if (origin.includes('Russian Federation')) {
-        return 'Russia'
-    }
-
-    if (origin === 'USA' || origin === 'US' || origin === 'United States' || origin.includes('United States') || origin === 'America') {
-        return 'United States of America'
+    if (filteredTranslationKeys && filteredTranslationKeys.length > 0) {
+        return translationKeys[filteredTranslationKeys[0]]
     }
 
     if (origin.includes('[')) {
         return origin.slice(0, origin.indexOf('['))
-    }
-
-    if (origin.includes('Ten-seat')) {
-        return undefined
     }
 
     return origin
