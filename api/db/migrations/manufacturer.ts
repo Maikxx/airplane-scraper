@@ -63,7 +63,7 @@ export const cleanManufacturer = (manufacturer: string): string => {
         .keys(translationKeys)
         .filter(key => lowerCaseName.includes(key))
 
-    if (filteredTranslationKeys.length > 0) {
+    if (filteredTranslationKeys && filteredTranslationKeys.length > 0) {
         return translationKeys[filteredTranslationKeys[0]]
     }
 
