@@ -3,10 +3,10 @@ import * as React from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { AirplaneImage } from '../AirplaneImage/AirplaneImage'
+import { AirplaneImage } from './AirplaneImage/AirplaneImage'
 import { Airplane } from '../../../types/Airplane'
 import c from 'classnames'
-import { AirplaneInformationContent } from '../AirplaneInformation/AirplaneInformationContent'
+import { Content } from './Content/Content'
 import { List } from '@material-ui/core'
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 export class AirplaneCard extends React.Component<Props> {
     public render() {
         const { airplane } = this.props
-        const airplaneInformation = [
+        const contents = [
             {
                 label: 'Role',
                 text: airplane.role,
@@ -66,10 +66,10 @@ export class AirplaneCard extends React.Component<Props> {
                         {airplane.title}
                     </Typography>
                     <List>
-                        {airplaneInformation.map(info => (
-                            <AirplaneInformationContent
-                                content={info}
-                                key={info.label}
+                        {contents.map(content => (
+                            <Content
+                                content={content}
+                                key={content.label}
                             />
                         ))}
                     </List>
