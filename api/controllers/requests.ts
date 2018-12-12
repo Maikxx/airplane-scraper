@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { MongoError } from 'mongodb'
 import { onError } from './error'
 import { AirplaneType } from '../models/airplane'
 import { getQueryFilters, QueryFilters } from './filters'
