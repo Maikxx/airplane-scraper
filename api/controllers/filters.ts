@@ -1,60 +1,67 @@
-import { Request, Response } from 'express'
-import { MongoError } from 'mongodb'
-import { onError } from './error'
-const Airplane = require('../models/airplane')
-
-export const getRoles = (request: Request, response: Response) => {
-    Airplane.find({ role: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('role')
-        .exec((err: MongoError, roles?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
-
-            response
-                .status(200)
-                .json(roles)
-        })
+interface Query {
+    limit?: string
+    page?: string
+    searchText?: string
+    filters?: string
 }
 
-export const getOrigins = (request: Request, response: Response) => {
-    Airplane.find({ origin: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('origin')
-        .exec((err: MongoError, origins?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
-
-            response
-                .status(200)
-                .json(origins)
-        })
+interface QueryFilters {
+    filterByAirplaneHasImages?: boolean
+    filterByAirplaneManufacturer?: string
+    filterByAirplaneOrigin?: string
+    filterByAirplaneRole?: string
+    filterByAirplaneUsageStatus?: string
 }
 
-export const getManufacturers = (request: Request, response: Response) => {
-    Airplane.find({ manufacturedBy: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('manufacturedBy')
-        .exec((err: MongoError, manufacturers?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+const getSearchFilter = (query: Query) => {
+    const { searchText } = query
+    const mongoSearchQuery = { title: { $regex: new RegExp(searchText, 'i') }}
 
-            response
-                .status(200)
-                .json(manufacturers)
-        })
+    return { ...(searchText && mongoSearchQuery) }
 }
 
-export const getUsageStatuses = (request: Request, response: Response) => {
-    Airplane.find({ usageStatus: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('usageStatus')
-        .exec((err: MongoError, usageStatuses?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+const getAirplaneImageFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneHasImages = parsedQueryFilters && parsedQueryFilters.filterByAirplaneHasImages
+    const mongoFilterQuery = { imageSrc: { $exists: true, $ne: undefined }}
 
-            response
-                .status(200)
-                .json(usageStatuses)
-        })
+    return { ...(filterByAirplaneHasImages && mongoFilterQuery) }
+}
+
+const getRoleFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
+    const mongoFilterQuery = { role: { $regex: new RegExp(filterByAirplaneRole, 'i') }}
+
+    return { ...(filterByAirplaneRole && mongoFilterQuery) }
+}
+
+const getOriginFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
+    const mongoFilterQuery = { origin: { $regex: new RegExp(filterByAirplaneOrigin, 'i') }}
+
+    return { ...(filterByAirplaneOrigin && mongoFilterQuery) }
+}
+
+const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneManufacturer = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturer
+    const mongoFilterQuery = { manufacturedBy: { $regex: new RegExp(filterByAirplaneManufacturer, 'i') }}
+
+    return { ...(filterByAirplaneManufacturer && mongoFilterQuery) }
+}
+
+const getUsageStatusFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneUsageStatus = parsedQueryFilters && parsedQueryFilters.filterByAirplaneUsageStatus
+    const mongoFilterQuery = { usageStatus: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}
+
+    return { ...(filterByAirplaneUsageStatus && mongoFilterQuery) }
+}
+
+export const getQueryFilters = (query: Query, parsedQueryFilters?: QueryFilters) => {
+    return {
+        ...getSearchFilter(query),
+        ...getAirplaneImageFilter(parsedQueryFilters),
+        ...getRoleFilter(parsedQueryFilters),
+        ...getOriginFilter(parsedQueryFilters),
+        ...getManufacturerFilter(parsedQueryFilters),
+        ...getUsageStatusFilter(parsedQueryFilters),
+    }
 }

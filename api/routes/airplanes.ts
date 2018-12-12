@@ -1,13 +1,12 @@
 import * as express from 'express'
-import * as AirplaneController from '../controllers/airplane'
-import * as FilterController from '../controllers/filters'
+import * as RequestController from '../controllers/requests'
 
 const router = express.Router()
 
-router.get('/usageStatuses', FilterController.getUsageStatuses)
-router.get('/manufacturers', FilterController.getManufacturers)
-router.get('/origins', FilterController.getOrigins)
-router.get('/roles', FilterController.getRoles)
-router.get('/', AirplaneController.getAirplanes)
+router.get('/usageStatuses', RequestController.getUsageStatuses)
+router.get('/manufacturers', RequestController.getManufacturers)
+router.get('/origins', RequestController.getOrigins)
+router.get('/roles', RequestController.getRoles)
+router.get('/', RequestController.getAirplanes)
 
 export default router
