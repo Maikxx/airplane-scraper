@@ -10,7 +10,7 @@ import * as util from 'util'
 import * as http from 'http'
 
 import airplaneRoutes from './routes/airplanes'
-// import { runMigrations } from './db/migrations'
+import { runMigrations } from './db/migrations'
 
 const { promisify } = util
 
@@ -21,7 +21,7 @@ const port = process.env.PORT
     console.log(`API Endpoint: ${baseUrl}/api/`)
 
     connectToMongoAtlas()
-    // await runMigrations()
+    await runMigrations()
 
     const app = express()
     app.use(helmet())
