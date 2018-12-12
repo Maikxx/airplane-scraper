@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import { MongoError } from 'mongodb'
 const Airplane = require('../models/airplane')
 
-export const getRoles = (request: Request, response: Response, next: NextFunction) => {
+export const getRoles = (request: Request, response: Response) => {
     Airplane.find({ role: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('role')
         .exec((err: MongoError, roles) => {
@@ -16,7 +16,7 @@ export const getRoles = (request: Request, response: Response, next: NextFunctio
         })
 }
 
-export const getOrigins = (request: Request, response: Response, next: NextFunction) => {
+export const getOrigins = (request: Request, response: Response) => {
     Airplane.find({ origin: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('origin')
         .exec((err: MongoError, origins) => {
@@ -30,7 +30,7 @@ export const getOrigins = (request: Request, response: Response, next: NextFunct
         })
 }
 
-export const getManufacturers = (request: Request, response: Response, next: NextFunction) => {
+export const getManufacturers = (request: Request, response: Response) => {
     Airplane.find({ manufacturedBy: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('manufacturedBy')
         .exec((err: MongoError, manufacturers) => {
@@ -44,7 +44,7 @@ export const getManufacturers = (request: Request, response: Response, next: Nex
         })
 }
 
-export const getUsageStatuses = (request: Request, response: Response, next: NextFunction) => {
+export const getUsageStatuses = (request: Request, response: Response) => {
     Airplane.find({ usageStatus: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('usageStatus')
         .exec((err: MongoError, usageStatuses) => {

@@ -1,4 +1,4 @@
-import * as express from 'express'
+import { Request, Response } from 'express'
 const Airplane = require('../models/airplane')
 
 interface QueryFilters {
@@ -6,6 +6,7 @@ interface QueryFilters {
     filterByAirplaneManufacturer?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
+    filterByAirplaneUsageStatus?: string
 }
 
 const getSearchFilter = (query: any) => {
@@ -34,6 +35,11 @@ const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
     return { ...(filterByAirplaneManufacturer && { manufacturedBy: { $regex: new RegExp(filterByAirplaneManufacturer, 'i') }}) }
 }
 
+const getUsageStatusFilter = (parsedQueryFilters?: QueryFilters) => {
+    const filterByAirplaneUsageStatus = parsedQueryFilters && parsedQueryFilters.filterByAirplaneUsageStatus
+    return { ...(filterByAirplaneUsageStatus && { manufacturedBy: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}) }
+}
+
 const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
     return {
         ...(getSearchFilter(query)),
@@ -41,10 +47,11 @@ const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
         ...(getRoleFilter(parsedQueryFilters)),
         ...(getOriginFilter(parsedQueryFilters)),
         ...(getManufacturerFilter(parsedQueryFilters)),
+        ...(getUsageStatusFilter(parsedQueryFilters)),
     }
 }
 
-export const getAirplanes = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const getAirplanes = (req: Request, res: Response) => {
     const { query } = req
     const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
 
