@@ -46,6 +46,9 @@ export class OriginFilter extends React.Component<Props, State> {
                 input={<Input name={`filterByAirplaneOrigin`} id={`filterByAirplaneOrigin`} />}
             >
                 <option value={``} disabled={true}/>
+                <option value={`all`}>
+                    All origins
+                </option>
                 {origins
                     .sort()
                     .map((origin: string, i: number) => (

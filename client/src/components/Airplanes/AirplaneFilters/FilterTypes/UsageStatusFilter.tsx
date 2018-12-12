@@ -46,6 +46,9 @@ export class UsageStatusFilter extends React.Component<Props, State> {
                 input={<Input name={`filterByAirplaneUsageStatus`} id={`filterByAirplaneUsageStatus`} />}
             >
                 <option value={``} disabled={true}/>
+                <option value={`all`}>
+                    All usage statuses
+                </option>
                 {usageStatuses
                     .sort()
                     .map((usageStatus: string, i: number) => (

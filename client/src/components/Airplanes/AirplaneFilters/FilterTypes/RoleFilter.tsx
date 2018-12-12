@@ -47,6 +47,9 @@ export class RoleFilter extends React.Component<Props, State> {
                 input={<Input name={`filterByAirplaneRole`} id={`filterByAirplaneRole`} />}
             >
                 <option value={``} disabled={true}/>
+                <option value={`all`}>
+                    All roles
+                </option>
                 {roles
                     .sort()
                     .map((role: string, i: number) => (

@@ -47,6 +47,9 @@ export class ManufacturerFilter extends React.Component<Props, State> {
                 input={<Input name={`filterByAirplaneManufacturer`} id={`filterByAirplaneManufacturer`} />}
             >
                 <option value={``} disabled={true}/>
+                <option value={`all`}>
+                    All manufacturers
+                </option>
                 {manufacturers
                     .sort()
                     .map((manufacturer: string, i: number) => (
