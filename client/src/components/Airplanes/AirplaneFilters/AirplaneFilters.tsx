@@ -9,6 +9,7 @@ import { AirplaneQueryFilters } from '../../../utils/query'
 import { RoleFilter } from './FilterTypes/RoleFilter'
 import { OriginFilter } from './FilterTypes/OriginFilter'
 import { ManufacturerFilter } from './FilterTypes/ManufacturerFilter'
+import { UsageStatusFilter } from './FilterTypes/UsageStatusFilter'
 
 interface Props {
     className?: string
@@ -16,6 +17,7 @@ interface Props {
     onChangeFilter?: (filters: AirplaneQueryFilters) => void
     origins?: string[]
     roles?: string[]
+    usageStatuses?: string[]
 }
 
 interface State extends AirplaneQueryFilters {}
@@ -26,10 +28,11 @@ export class AirplaneFilters extends React.Component<Props, State> {
         filterByAirplaneManufacturer: '',
         filterByAirplaneOrigin: '',
         filterByAirplaneRole: '',
+        filterByAirplaneUsageStatus: '',
     }
 
     public render() {
-        const { origins, roles, manufacturers } = this.props
+        const { origins, roles, manufacturers, usageStatuses } = this.props
 
         return (
             <Filters className={this.getClassName()}>
@@ -53,6 +56,11 @@ export class AirplaneFilters extends React.Component<Props, State> {
                             className={`asa-AirplaneFilters__filter asa-Select`}
                             onChange={this.onSelectFilterChange}
                             manufacturers={manufacturers}
+                        />
+                        <UsageStatusFilter
+                            className={`asa-AirplaneFilters__filter asa-Select`}
+                            onChange={this.onSelectFilterChange}
+                            usageStatuses={usageStatuses}
                         />
                     </FormGroup>
                 </Form>
@@ -86,6 +94,7 @@ export class AirplaneFilters extends React.Component<Props, State> {
             filterByAirplaneRole,
             filterByAirplaneOrigin,
             filterByAirplaneManufacturer,
+            filterByAirplaneUsageStatus,
         } = this.state
 
         return {
@@ -93,6 +102,7 @@ export class AirplaneFilters extends React.Component<Props, State> {
             filterByAirplaneRole,
             filterByAirplaneOrigin,
             filterByAirplaneManufacturer,
+            filterByAirplaneUsageStatus,
         }
     }
 

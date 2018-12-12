@@ -6,6 +6,7 @@ import {
     rolesQuery,
     originsQuery,
     manufacturersQuery,
+    usageStatusesQuery,
 } from '../../utils/query'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Page } from '../../components/Layout/Page/Page'
@@ -48,6 +49,7 @@ export class AirplanesView extends React.Component<Props> {
         const roles = await rolesQuery()
         const origins = await originsQuery()
         const manufacturers = await manufacturersQuery()
+        const usageStatuses = await usageStatusesQuery()
         const airplaneData = await airplaneQuery(this.getCurrentQueryOptions())
 
         this.setState({
@@ -58,6 +60,7 @@ export class AirplanesView extends React.Component<Props> {
             origins,
             page: page + 1,
             roles,
+            usageStatuses,
         })
     }
 
