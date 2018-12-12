@@ -13,6 +13,8 @@ interface QueryFilters {
     filterByAirplaneUsageStatus?: string
 }
 
+type ResetFilterType = 'all'
+
 const getSearchFilter = (query: Query) => {
     const { searchText } = query
     const mongoSearchQuery = { title: { $regex: new RegExp(searchText, 'i') }}
@@ -29,28 +31,40 @@ const getAirplaneImageFilter = (parsedQueryFilters?: QueryFilters) => {
 
 const getRoleFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneRole = parsedQueryFilters && parsedQueryFilters.filterByAirplaneRole
-    const mongoFilterQuery = { role: { $regex: new RegExp(filterByAirplaneRole, 'i') }}
+    const mongoFilterQuery = filterByAirplaneRole
+        && filterByAirplaneRole !== 'all'
+            ? { role: { $regex: new RegExp(filterByAirplaneRole, 'i') }}
+            : {}
 
     return { ...(filterByAirplaneRole && mongoFilterQuery) }
 }
 
 const getOriginFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneOrigin = parsedQueryFilters && parsedQueryFilters.filterByAirplaneOrigin
-    const mongoFilterQuery = { origin: { $regex: new RegExp(filterByAirplaneOrigin, 'i') }}
+    const mongoFilterQuery = filterByAirplaneOrigin
+        && filterByAirplaneOrigin !== 'all'
+            ? { origin: { $regex: new RegExp(filterByAirplaneOrigin, 'i') }}
+            : {}
 
     return { ...(filterByAirplaneOrigin && mongoFilterQuery) }
 }
 
 const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneManufacturer = parsedQueryFilters && parsedQueryFilters.filterByAirplaneManufacturer
-    const mongoFilterQuery = { manufacturedBy: { $regex: new RegExp(filterByAirplaneManufacturer, 'i') }}
+    const mongoFilterQuery = filterByAirplaneManufacturer
+        && filterByAirplaneManufacturer !== 'all'
+            ? { manufacturedBy: { $regex: new RegExp(filterByAirplaneManufacturer, 'i') }}
+            : {}
 
     return { ...(filterByAirplaneManufacturer && mongoFilterQuery) }
 }
 
 const getUsageStatusFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneUsageStatus = parsedQueryFilters && parsedQueryFilters.filterByAirplaneUsageStatus
-    const mongoFilterQuery = { usageStatus: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}
+    const mongoFilterQuery = filterByAirplaneUsageStatus
+        && filterByAirplaneUsageStatus !== 'all'
+            ? { usageStatus: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}
+            : {}
 
     return { ...(filterByAirplaneUsageStatus && mongoFilterQuery) }
 }
