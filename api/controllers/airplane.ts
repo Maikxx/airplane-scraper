@@ -1,5 +1,15 @@
 import { Request, Response } from 'express'
+import { onError } from './error'
+import { MongoError } from 'mongodb'
+import { AirplaneType } from '../models/airplane'
 const Airplane = require('../models/airplane')
+
+interface Query {
+    limit?: string
+    page?: string
+    searchText?: string
+    filters?: string
+}
 
 interface QueryFilters {
     filterByAirplaneHasImages?: boolean
@@ -9,7 +19,7 @@ interface QueryFilters {
     filterByAirplaneUsageStatus?: string
 }
 
-const getSearchFilter = (query: any) => {
+const getSearchFilter = (query: Query) => {
     const { searchText } = query
 
     return { ...(searchText && { title: { $regex: new RegExp(searchText, 'i') }}) }
@@ -40,7 +50,7 @@ const getUsageStatusFilter = (parsedQueryFilters?: QueryFilters) => {
     return { ...(filterByAirplaneUsageStatus && { manufacturedBy: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}) }
 }
 
-const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
+const getQueryFilters = (query: Query, parsedQueryFilters?: QueryFilters) => {
     return {
         ...(getSearchFilter(query)),
         ...(getAirplaneImageFilter(parsedQueryFilters)),
@@ -51,8 +61,8 @@ const getQueryFilters = (query: any, parsedQueryFilters?: QueryFilters) => {
     }
 }
 
-export const getAirplanes = (req: Request, res: Response) => {
-    const { query } = req
+export const getAirplanes = (request: Request, response: Response) => {
+    const { query } = request
     const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
 
     const page = queryPage && parseInt(queryPage, 10) || 0
@@ -60,24 +70,25 @@ export const getAirplanes = (req: Request, res: Response) => {
     const parsedQueryFilters = queryFilters && JSON.parse(queryFilters)
     const filters = getQueryFilters(query, parsedQueryFilters)
 
-    Airplane.countDocuments(filters, (err, count) => {
+    Airplane.countDocuments(filters, (err: MongoError, count?: number) => {
         Airplane.find(filters)
             .skip(page * limit)
             .limit(limit)
-            .exec((err, docs) => {
+            .exec((err: MongoError, docs: AirplaneType[]) => {
                 if (err) {
-                    res.status(500).json(err)
-                    return null
+                    return onError(err, response)
                 }
 
                 const hasNextPage = page < count / 20
-                const response = {
+                const data = {
                     totalCount: count,
                     hasNextPage,
                     nodes: docs,
                 }
 
-                res.status(200).json(response)
+                response
+                    .status(200)
+                    .json(data)
             })
     })
 }

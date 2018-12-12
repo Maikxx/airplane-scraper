@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { MongoError } from 'mongodb'
+import { onError } from './error'
 const Airplane = require('../models/airplane')
 
 export const getRoles = (request: Request, response: Response) => {
@@ -56,12 +57,4 @@ export const getUsageStatuses = (request: Request, response: Response) => {
                 .status(200)
                 .json(usageStatuses)
         })
-}
-
-const onError = (error: MongoError, response: Response) => {
-    response
-        .status(500)
-        .json(error)
-
-    return null
 }
