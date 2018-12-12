@@ -1,19 +1,12 @@
-interface Query {
-    limit?: string
-    page?: string
-    searchText?: string
-    filters?: string
-}
+import { Query } from './requests'
 
-interface QueryFilters {
+export interface QueryFilters {
     filterByAirplaneHasImages?: boolean
     filterByAirplaneManufacturer?: string
     filterByAirplaneOrigin?: string
     filterByAirplaneRole?: string
     filterByAirplaneUsageStatus?: string
 }
-
-type ResetFilterType = 'all'
 
 const getSearchFilter = (query: Query) => {
     const { searchText } = query

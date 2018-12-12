@@ -2,12 +2,19 @@ import { Request, Response } from 'express'
 import { MongoError } from 'mongodb'
 import { onError } from './error'
 import { AirplaneType } from '../models/airplane'
-import { getQueryFilters } from './filters'
+import { getQueryFilters, QueryFilters } from './filters'
 const Airplane = require('../models/airplane')
 
-export const getAirplanes = (request: Request, response: Response) => {
+export interface Query {
+    limit?: string
+    page?: string
+    searchText?: string
+    filters?: string
+}
+
+export const getAirplanes = async (request: Request, response: Response): Promise<void> => {
     const { query } = request
-    const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
+    const { page: queryPage, limit: queryLimit, filters: queryFilters } = query as Query
 
     const page = queryPage
         ? parseInt(queryPage, 10)
@@ -17,84 +24,68 @@ export const getAirplanes = (request: Request, response: Response) => {
         ? parseInt(queryLimit, 10)
         : 20
 
-    const parsedQueryFilters = queryFilters && JSON.parse(queryFilters)
+    const parsedQueryFilters = queryFilters && JSON.parse(queryFilters) as QueryFilters
     const filters = getQueryFilters(query, parsedQueryFilters)
 
-    Airplane.countDocuments(filters, (err: MongoError, count?: number) => {
-        Airplane.find(filters)
+    try {
+        const count = await Airplane.countDocuments(filters) as number
+        const docs = await Airplane.find(filters)
             .skip(page * limit)
-            .limit(limit)
-            .exec((err: MongoError, docs: AirplaneType[]) => {
-                if (err) {
-                    return onError(err, response)
-                }
+            .limit(limit) as AirplaneType[]
 
-                const hasNextPage = page < count / 20
-                const data = {
-                    totalCount: count,
-                    hasNextPage,
-                    nodes: docs,
-                }
+        const hasNextPage = page < count / 20
+        const data = {
+            totalCount: count,
+            hasNextPage,
+            nodes: docs,
+        }
 
-                response
-                    .status(200)
-                    .json(data)
-            })
-    })
+        response.status(200).json(data)
+    } catch (error) {
+        return onError(error, response)
+    }
 }
 
-export const getRoles = (request: Request, response: Response) => {
-    Airplane.find({ role: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('role')
-        .exec((err: MongoError, roles?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+export const getRoles = async (request: Request, response: Response) => {
+    try {
+        const roles = await Airplane.find({ role: { $nin: [ undefined, null, '', '\n' ]}})
+            .distinct('role') as string[]
 
-            response
-                .status(200)
-                .json(roles)
-        })
+        response.status(200).json(roles)
+    } catch (error) {
+        return onError(error, response)
+    }
 }
 
-export const getOrigins = (request: Request, response: Response) => {
-    Airplane.find({ origin: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('origin')
-        .exec((err: MongoError, origins?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+export const getOrigins = async (request: Request, response: Response) => {
+    try {
+        const origins = await Airplane.find({ origin: { $nin: [ undefined, null, '', '\n' ]}})
+            .distinct('origin') as string[]
 
-            response
-                .status(200)
-                .json(origins)
-        })
+        response.status(200).json(origins)
+    } catch (error) {
+        return onError(error, response)
+    }
 }
 
-export const getManufacturers = (request: Request, response: Response) => {
-    Airplane.find({ manufacturedBy: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('manufacturedBy')
-        .exec((err: MongoError, manufacturers?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+export const getManufacturers = async (request: Request, response: Response) => {
+    try {
+        const manufacturers = await Airplane.find({ manufacturedBy: { $nin: [ undefined, null, '', '\n' ]}})
+            .distinct('manufacturedBy') as string[]
 
-            response
-                .status(200)
-                .json(manufacturers)
-        })
+        response.status(200).json(manufacturers)
+    } catch (error) {
+        return onError(error, response)
+    }
 }
 
-export const getUsageStatuses = (request: Request, response: Response) => {
-    Airplane.find({ usageStatus: { $nin: [ undefined, null, '', '\n' ]}})
-        .distinct('usageStatus')
-        .exec((err: MongoError, usageStatuses?: string[]) => {
-            if (err) {
-                return onError(err, response)
-            }
+export const getUsageStatuses = async (request: Request, response: Response) => {
+    try {
+        const usageStatuses = await Airplane.find({ usageStatus: { $nin: [ undefined, null, '', '\n' ]}})
+            .distinct('usageStatus') as string[]
 
-            response
-                .status(200)
-                .json(usageStatuses)
-        })
+        response.status(200).json(usageStatuses)
+    } catch (error) {
+        return onError(error, response)
+    }
 }
