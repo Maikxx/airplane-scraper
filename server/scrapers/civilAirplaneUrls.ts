@@ -3,7 +3,7 @@ import { getQueryOptions } from '../queries'
 import { convertToUsableUrl } from '../transformers'
 import { scrapeAirplanePage } from './individualPlane'
 
-export const scrapeCivilAirplaneUrls = async () => {
+export const scrapeCivilAirplaneUrls = async (): Promise<void> => {
     const listUrl = `https://en.wikipedia.org/wiki/List_of_civil_aircraft`
     const hrefScraper = await request(getQueryOptions(listUrl))
 
