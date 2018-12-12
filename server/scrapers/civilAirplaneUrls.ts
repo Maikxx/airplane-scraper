@@ -8,12 +8,12 @@ export const scrapeCivilAirplaneUrls = async (): Promise<void> => {
     const hrefScraper = await request(getQueryOptions(listUrl))
 
     hrefScraper('h3 + ul li a:first-child')
-        .each(async (i2, anchorElement) => {
+        .each(async (i2: any, anchorElement: CheerioElement) => {
             const href = await hrefScraper(anchorElement).attr('href')
             const usableUrl = convertToUsableUrl(href)
 
             if (!usableUrl) {
-                return
+                return null
             }
 
             scrapeAirplanePage(usableUrl)
