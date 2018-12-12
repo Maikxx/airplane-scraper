@@ -211,7 +211,7 @@ export const cleanManufacturer = (manufacturer: string): string => {
     return removeExcessTokens(manufacturer)
 }
 
-export const migrateAirplaneManufacturers = async () => {
+export const migrateAirplaneManufacturers = async (): Promise<void> => {
     const fileBuffer = await readFile(dataFilePath)
     const fileData = await JSON.parse(fileBuffer.toString())
     const docs = await Airplane.find({})
@@ -236,7 +236,7 @@ export const migrateAirplaneManufacturers = async () => {
         /**
          * Store to file
          */
-        const currentPlane = await fileData.filter(ap => ap.title === title)[0]
+        const currentPlane = await fileData.filter(airplane => airplane.title === title)[0]
 
         if (currentPlane) {
             currentPlane.manufacturedBy = manufacturedBy

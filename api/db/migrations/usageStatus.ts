@@ -53,7 +53,7 @@ const cleanUsageStatus = (usageStatus: string): string => {
     return 'Other'
 }
 
-export const migrateAirplaneUsageStatus = async () => {
+export const migrateAirplaneUsageStatus = async (): Promise<void> => {
     const docs = await Airplane.find({})
     const fileBuffer = await readFile(dataFilePath)
     const fileData = await JSON.parse(fileBuffer.toString())
@@ -78,7 +78,7 @@ export const migrateAirplaneUsageStatus = async () => {
         /**
          * Store to file
          */
-        const currentPlane = await fileData.filter(ap => ap.title === title)[0]
+        const currentPlane = await fileData.filter(airplane => airplane.title === title)[0]
 
         if (currentPlane) {
             currentPlane.usageStatus = usageStatus

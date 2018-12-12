@@ -75,7 +75,7 @@ export const migrateAirplaneRoles = async (): Promise<void> => {
         /**
          * Store to file
          */
-        const currentPlane = await fileData.filter(ap => ap.title === title)[0]
+        const currentPlane = await fileData.filter(airplane => airplane.title === title)[0]
 
         if (currentPlane) {
             currentPlane.role = role

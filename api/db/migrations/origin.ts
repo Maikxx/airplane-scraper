@@ -49,7 +49,7 @@ export const cleanOrigin = (origin: string): string => {
     return origin
 }
 
-export const migrateAirplaneOrigins = async () => {
+export const migrateAirplaneOrigins = async (): Promise<void> => {
     const fileBuffer = await readFile(dataFilePath)
     const fileData = await JSON.parse(fileBuffer.toString())
     const docs = await Airplane.find({})
@@ -74,7 +74,7 @@ export const migrateAirplaneOrigins = async () => {
         /**
          * Store to file
          */
-        const currentPlane = await fileData.filter(ap => ap.title === title)[0]
+        const currentPlane = await fileData.filter(airplane => airplane.title === title)[0]
 
         if (currentPlane) {
             currentPlane.origin = origin
