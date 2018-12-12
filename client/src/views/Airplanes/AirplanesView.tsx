@@ -27,6 +27,7 @@ interface State {
     page: number
     roles?: string[]
     searchText?: string
+    usageStatuses?: string[]
 }
 
 export class AirplanesView extends React.Component<Props> {
@@ -72,6 +73,7 @@ export class AirplanesView extends React.Component<Props> {
             manufacturers,
             roles,
             origins,
+            usageStatuses,
         } = this.state
 
         const canShowContent = !loading && !!airplanes
@@ -84,6 +86,7 @@ export class AirplanesView extends React.Component<Props> {
                     onChangeFilter={this.onFilter}
                     origins={origins}
                     roles={roles}
+                    usageStatuses={usageStatuses}
                 />
                 {!canShowContent && (
                     <Loader />
