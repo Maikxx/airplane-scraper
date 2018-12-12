@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { onError } from './error'
-import { AirplaneType } from '../models/airplane'
+import { AirplaneType } from '../types/Airplane'
 import { getQueryFilters, QueryFilters } from './filters'
 const Airplane = require('../models/airplane')
 
