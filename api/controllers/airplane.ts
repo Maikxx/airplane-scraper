@@ -65,8 +65,14 @@ export const getAirplanes = (request: Request, response: Response) => {
     const { query } = request
     const { page: queryPage, limit: queryLimit, filters: queryFilters } = query
 
-    const page = queryPage && parseInt(queryPage, 10) || 0
-    const limit = queryLimit && parseInt(queryLimit, 10) || 20
+    const page = queryPage
+        ? parseInt(queryPage, 10)
+        : 0
+
+    const limit = queryLimit
+        ? parseInt(queryLimit, 10)
+        : 20
+
     const parsedQueryFilters = queryFilters && JSON.parse(queryFilters)
     const filters = getQueryFilters(query, parsedQueryFilters)
 
