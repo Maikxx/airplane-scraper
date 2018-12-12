@@ -47,7 +47,7 @@ const getManufacturerFilter = (parsedQueryFilters?: QueryFilters) => {
 
 const getUsageStatusFilter = (parsedQueryFilters?: QueryFilters) => {
     const filterByAirplaneUsageStatus = parsedQueryFilters && parsedQueryFilters.filterByAirplaneUsageStatus
-    return { ...(filterByAirplaneUsageStatus && { manufacturedBy: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}) }
+    return { ...(filterByAirplaneUsageStatus && { usageStatus: { $regex: new RegExp(filterByAirplaneUsageStatus, 'i') }}) }
 }
 
 const getQueryFilters = (query: Query, parsedQueryFilters?: QueryFilters) => {
