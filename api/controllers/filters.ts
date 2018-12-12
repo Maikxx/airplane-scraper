@@ -6,7 +6,7 @@ const Airplane = require('../models/airplane')
 export const getRoles = (request: Request, response: Response) => {
     Airplane.find({ role: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('role')
-        .exec((err: MongoError, roles) => {
+        .exec((err: MongoError, roles?: string[]) => {
             if (err) {
                 return onError(err, response)
             }
@@ -20,7 +20,7 @@ export const getRoles = (request: Request, response: Response) => {
 export const getOrigins = (request: Request, response: Response) => {
     Airplane.find({ origin: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('origin')
-        .exec((err: MongoError, origins) => {
+        .exec((err: MongoError, origins?: string[]) => {
             if (err) {
                 return onError(err, response)
             }
@@ -34,7 +34,7 @@ export const getOrigins = (request: Request, response: Response) => {
 export const getManufacturers = (request: Request, response: Response) => {
     Airplane.find({ manufacturedBy: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('manufacturedBy')
-        .exec((err: MongoError, manufacturers) => {
+        .exec((err: MongoError, manufacturers?: string[]) => {
             if (err) {
                 return onError(err, response)
             }
@@ -48,7 +48,7 @@ export const getManufacturers = (request: Request, response: Response) => {
 export const getUsageStatuses = (request: Request, response: Response) => {
     Airplane.find({ usageStatus: { $nin: [ undefined, null, '', '\n' ]}})
         .distinct('usageStatus')
-        .exec((err: MongoError, usageStatuses) => {
+        .exec((err: MongoError, usageStatuses?: string[]) => {
             if (err) {
                 return onError(err, response)
             }
