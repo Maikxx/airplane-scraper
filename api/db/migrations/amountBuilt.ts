@@ -3,6 +3,7 @@ const Airplane = require('../../models/airplane')
 import * as util from 'util'
 import * as fs from 'fs'
 import * as path from 'path'
+import { convertToNumber } from '../../utils/String.prototype'
 
 const { promisify } = util
 const readFile = promisify(fs.readFile)
@@ -17,11 +18,7 @@ const cleanAmountBuilt = (amountBuilt: string): number => {
         return 0
     }
 
-    const removeCommas = (text: string): string => {
-        return text.replace(',', '')
-    }
-
-    const cleanedAmountBuilt = Number(removeCommas(amountBuiltNumbers[0]))
+    const cleanedAmountBuilt = convertToNumber(amountBuiltNumbers[0])
 
     return cleanedAmountBuilt
 }

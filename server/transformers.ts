@@ -3,13 +3,11 @@ const removeSourceNumbersFromText = (text: string): string => {
 }
 
 export const cleanText = (text: string): string => {
-    return removeSourceNumbersFromText(text)
-        .trim()
+    return removeSourceNumbersFromText(text).trim()
 }
 
 export const convertToNumber = (text: string): number => {
-    return Number(text
-        .replace(',', ''))
+    return Number(text.replace(',', ''))
 }
 
 export const convertToUsableUrl = (url: string): string | null => {

@@ -7,7 +7,7 @@ const Airplane = require('../models/airplane')
 const { promisify } = util
 const readFile = promisify(fs.readFile)
 
-export const storeToMongo = async () => {
+export const storeToMongo = async (): Promise<void> => {
     try {
         const fileBuffer = await readFile(path.resolve(__dirname, '../../data/planes.json'))
         const airplanes = JSON.parse(fileBuffer.toString())
