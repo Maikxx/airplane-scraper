@@ -6,11 +6,11 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "yarn clearDist && parcel build app/index.html --no-source-maps && yarn moveHtmlFile",
-    "clearDist": "rm -rf dist/",
+    "build": "yarn clear-dist && parcel build app/index.html --no-source-maps && yarn move-html-file",
+    "clear-dist": "rm -rf dist/",
     "lint": "tslint",
-    "moveHtmlFile": "mv dist/index.html ./index.html",
-    "start:app": "yarn clearDist && parcel app/index.html"
+    "move-html-file": "mv dist/index.html ./index.html",
+    "start-app": "yarn clear-dist && parcel app/index.html"
   },
   "devDependencies": {
     "@types/query-string": "^6.1.1",
