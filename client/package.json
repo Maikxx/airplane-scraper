@@ -1,0 +1,42 @@
+{
+  "name": "airplane-scraper-app",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "Maikel van Veen <maikeloo10@hotmail.com>",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn clearDist && parcel build app/index.html --no-source-maps && yarn moveHtmlFile",
+    "clearDist": "rm -rf dist/",
+    "lint": "tslint",
+    "moveHtmlFile": "mv dist/index.html ./index.html",
+    "start:app": "yarn clearDist && parcel app/index.html"
+  },
+  "devDependencies": {
+    "@types/query-string": "^6.1.1",
+    "@types/react": "^16.7.10",
+    "@types/react-dom": "^16.0.11",
+    "autoprefixer": "^9.3.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "json5": "^2.1.0",
+    "parcel-bundler": "^1.10.3",
+    "sass": "^1.15.1",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.2.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.6.0",
+    "@material-ui/icons": "^3.0.1",
+    "@types/classnames": "^2.2.6",
+    "babel-polyfill": "^6.26.0",
+    "classnames": "^2.2.6",
+    "query-string": "^6.2.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-infinite-scroll-component": "^4.2.0"
+  }
+}
