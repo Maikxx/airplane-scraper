@@ -6,10 +6,10 @@
     "author": "Maikel van Veen <maikeloo10@hotmail.com>",
     "license": "MIT",
     "scripts": {
-        "lint": "tslint",
-        "start-server": "nodemon",
+        "tslint": "tslint -p . -c tslint.json \"**/*.ts\" \"**/*.tsx\"",
         "start-api": "nodemon --watch './api/**/*' -e ts --exec 'ts-node' ./api/index.ts",
-        "start-client": "cd client && yarn start-app"
+        "start-client": "cd client && yarn start-app",
+        "start-server": "nodemon"
     },
     "dependencies": {
         "cheerio": "^1.0.0-rc.2",
