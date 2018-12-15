@@ -1,0 +1,15 @@
+.asa-Page {
+    position: relative;
+    height: 100vh;
+
+    .asa-Loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &--has-page-header {
+        padding-top: 63px;
+    }
+}
